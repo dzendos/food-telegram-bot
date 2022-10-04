@@ -1,0 +1,43 @@
+run:
+  timeout: 2m
+
+linters:
+  enable:
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - dogsled
+    - dupl
+    - durationcheck
+    - errchkjson
+    - errname
+    - exhaustive
+    - exportloopref
+    - gocognit
+    - gocritic
+    - goimports
+    - gomoddirectives
+    - importas
+    - misspell
+    - nilerr
+    - noctx
+    - prealloc
+    - predeclared
+    - revive
+    - unconvert
+    - unparam
+    - whitespace
+
+linters-settings:
+  # Only report code with cognitive complexity > 20
+  gocognit:
+    min-complexity: 20
+
+issues:
+  exclude-rules:
+    # Ignore code duplication in tests
+    - path: _test\.go
+      linters:
+        - dupl
+
+modules-download-mode: readonly
