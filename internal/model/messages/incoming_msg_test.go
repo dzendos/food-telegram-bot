@@ -13,7 +13,7 @@ func Test_OnStartCommand_ShouldAnswerWithIntroMessage(t *testing.T) {
 	sender := mocks.NewMockMessageSender(ctrl)
 	model := New(sender)
 
-	sender.EXPECT().SendMessage("hello", int64(123))
+	sender.EXPECT().SendReference("hello", int64(123))
 
 	err := model.IncomingMessage(&Message{
 		Text:   "/start",
