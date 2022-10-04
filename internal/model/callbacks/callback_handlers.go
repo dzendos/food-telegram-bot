@@ -9,8 +9,7 @@ const (
 )
 
 type CallbackHandler interface {
-	SendMessage(text string, userID int64) error
-	ShowAlert(text string, messageID string) error
+	SendReference(text string, userID int64) error
 }
 
 type Model struct {

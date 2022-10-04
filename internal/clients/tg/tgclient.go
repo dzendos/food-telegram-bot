@@ -3,9 +3,11 @@ package tg
 import (
 	"log"
 
+	tgbotapi "github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/pkg/errors"
 )
 
@@ -13,88 +15,89 @@ type tokenGetter interface {
 	Token() string
 }
 
+var tgClient *Client
+
 type Client struct {
-	client *tgbotapi.BotAPI
+	bot           *tgbotapi.Bot
+	dispatcher    *ext.Dispatcher
+	updater       *ext.Updater
+	msgModel      *messages.Model
+	callbackModel *callbacks.Model
 }
 
 func New(tokenGetter tokenGetter) (*Client, error) {
-	client, err := tgbotapi.NewBotAPI(tokenGetter.Token())
+	bot, err := tgbotapi.NewBot(tokenGetter.Token(), &tgbotapi.BotOpts{
+		// Client: http.Client{},
+		DefaultRequestOpts: &tgbotapi.RequestOpts{
+			Timeout: tgbotapi.DefaultTimeout,
+			APIURL:  tgbotapi.DefaultAPIURL,
+		},
+	})
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot create NewBotAPI")
 	}
 
-	return &Client{
-		client: client,
-	}, nil
+	updater := ext.NewUpdater(&ext.UpdaterOpts{
+		ErrorLog: nil,
+		DispatcherOpts: ext.DispatcherOpts{
+			// If an error is returned by a handler, log it and continue going.
+			ErrorLog: nil,
+			Error: func(b *tgbotapi.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
+				log.Println(("an error occurred while handling update:" + err.Error()))
+				return ext.DispatcherActionNoop
+			},
+			MaxRoutines: ext.DefaultMaxRoutines,
+		},
+	})
+	dispatcher := updater.Dispatcher
+
+	tgClient = &Client{
+		bot:        bot,
+		dispatcher: dispatcher,
+		updater:    &updater,
+	}
+
+	return tgClient, nil
 }
 
-func (c *Client) SendMessage(text string, userID int64) error {
-	_, err := c.client.Send(tgbotapi.NewMessage(userID, text))
+func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
+	log.Printf("update caught: %s", ctx.Message.Text)
+
+	if ctx.CallbackQuery != nil {
+
+	} else if ctx.Message != nil {
+		tgClient.msgModel.IncomingMessage(&messages.Message{
+			Text:      ctx.Message.Text,
+			UserID:    ctx.Message.From.Id,
+			MessageID: int(ctx.Message.MessageId),
+		})
+	}
+
+	return nil
+}
+
+func (c *Client) SendReference(text string, userID int64) error {
+	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
+		ParseMode:   "HTML",
+		ReplyMarkup: shopKeyboard,
+	})
+
 	if err != nil {
 		return errors.Wrap(err, "client.Send")
 	}
 	return nil
 }
 
-func (c *Client) ShowAlert(text string, messageID string) error {
-	alert := tgbotapi.NewCallback(messageID, text)
-
-	_, err := c.client.Send(alert)
-
-	if err != nil {
-		return errors.Wrap(err, "client.ShowAlert")
-	}
-
-	return nil
-}
-
-func (c *Client) DeleteMessage(userID int64, messageID int) error {
-	deleteMessage := tgbotapi.NewDeleteMessage(userID, messageID)
-	_, err := c.client.Send(deleteMessage)
-
-	if err != nil {
-		return errors.Wrap(err, "client.EditMessage")
-	}
-
-	return nil
-}
-
 func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callbacks.Model) {
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	c.msgModel = msgModel
+	c.callbackModel = callbackModel
 
-	updates := c.client.GetUpdatesChan(u)
+	c.dispatcher.AddHandler(handlers.NewCommand("start", incomingUpdate))
 
-	log.Println("listening for messages")
-
-	for update := range updates {
-		if update.Message != nil { // If we got a message
-			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-			err := msgModel.IncomingMessage(&messages.Message{
-				Text:      update.Message.Text,
-				UserID:    update.Message.From.ID,
-				MessageID: update.Message.MessageID,
-			})
-			if err != nil {
-				log.Println("error processing message: ", err)
-			}
-		} else if update.CallbackQuery != nil {
-			log.Printf("[%s] data: %s",
-				update.CallbackQuery.Message.From.UserName,
-				update.CallbackQuery.Data,
-			)
-
-			err := callbackModel.IncomingCallback(&callbacks.CallbackData{
-				FromID:     update.CallbackQuery.From.ID,
-				MessageID:  update.CallbackQuery.Message.MessageID,
-				Data:       update.CallbackData(),
-				CallbackID: update.CallbackQuery.ID,
-			})
-
-			if err != nil {
-				log.Println("error processing data: ", err)
-			}
-		}
+	err := c.updater.StartPolling(c.bot, &ext.PollingOpts{DropPendingUpdates: true})
+	if err != nil {
+		panic("failed to start polling: " + err.Error())
 	}
+
+	c.updater.Idle()
 }
