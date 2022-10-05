@@ -7,6 +7,7 @@ import (
 	"github.com/dzendos/dubna/internal/config"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
+	"github.com/dzendos/dubna/internal/model/queries"
 )
 
 func main() {
@@ -22,6 +23,11 @@ func main() {
 
 	msgModel := messages.New(tgClient)
 	callbackModel := callbacks.New(tgClient)
+	serverModel := queries.New(tgClient, config.Token())
 
 	tgClient.ListenUpdates(msgModel, callbackModel)
+
+	if err := serverModel.Server.ListenAndServe(); err != nil {
+		panic("failed to listen and serve: " + err.Error())
+	}
 }

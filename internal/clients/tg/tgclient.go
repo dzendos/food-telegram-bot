@@ -98,6 +98,4 @@ func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callback
 	if err != nil {
 		panic("failed to start polling: " + err.Error())
 	}
-
-	c.updater.Idle()
 }
