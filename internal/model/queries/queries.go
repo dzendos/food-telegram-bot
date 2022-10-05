@@ -15,14 +15,15 @@ type Model struct {
 	Server   http.Server
 }
 
-var webUrl = "https://dce5-188-130-155-166.eu.ngrok.io"
+var webappURL = "https://7af0-188-130-155-154.eu.ngrok.io"
 
 func New(tgClient QueriesHandler, token string) *Model {
 	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("./web/")))
 	mux.HandleFunc("/validate", validate(token))
 	server := http.Server{
 		Handler: mux,
-		Addr:    ":8080",
+		Addr:    "0.0.0.0:8080",
 	}
 
 	return &Model{
@@ -47,3 +48,9 @@ func validate(token string) func(writer http.ResponseWriter, request *http.Reque
 		}
 	}
 }
+
+// Query getRestaurant -> (name, description, photo, methods of connections)
+
+// Query getMenu restaurant -> (array of dishes(name, description, photo, maybe category))
+
+// Query orderIsReady -> restaurant -> (array of dishes(by id?))

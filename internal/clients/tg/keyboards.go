@@ -6,6 +6,6 @@ import tgbotapi "github.com/PaulSonOfLars/gotgbot/v2"
 
 var shopKeyboard = tgbotapi.InlineKeyboardMarkup{
 	InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
-		{Text: "Press me", WebApp: &tgbotapi.WebAppInfo{Url: "https://dce5-188-130-155-166.eu.ngrok.io/mainPage.html"}},
+		{Text: "Press me", WebApp: &tgbotapi.WebAppInfo{Url: "https://f865-188-130-155-154.eu.ngrok.io/mainPage.html"}},
 	}},
 }
