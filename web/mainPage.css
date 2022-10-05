@@ -1,0 +1,150 @@
+body {
+    background-color: black;
+    color: #86b1ce;
+    margin: 0;
+    padding: 0;
+}
+
+.title {
+    text-align: center;
+    font-size: 50px;
+    font-weight: 1000;
+    margin-top: 20px;
+}
+
+.items {
+    width: 90%;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 19% 19% 19% 19% 19%;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.item__image {
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.item__name {
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.item__button {
+    width: 60%;
+    margin: 10px auto;
+    height: 35px;
+    border: 2px solid #86b1ce;
+    background-color: black;
+    color: #86b1ce;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    outline: none;
+    transition: .3s linear;
+}
+
+.item__button:hover {
+    background-color: #86b1ce;
+    color: black;
+}
+
+.item__hidden {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.item__count {
+    margin: 10px 10px 0px 10px;
+    font-size: 20px;
+}
+
+.item__button__hide {
+    background-color: black;
+    color: #86b1ce;
+    border: 2px solid #86b1ce;
+    border-radius: 10px;
+    height: 35px;
+    width: 40px;
+    margin-top: 10px;
+    padding: 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: .3s linear;
+}
+
+.item__button__hide:hover {
+    background-color: #86b1ce;
+    color: black;
+}
+
+.footer {
+    display: block;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.footer__link {
+    border: 2px solid #86b1ce;
+    border-radius: 40px;
+    padding: 10px 20px;
+    font-size: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #86b1ce;
+    transition: .3s linear;
+}
+
+.footer__link:hover {
+    color: black;
+    background-color: #86b1ce;
+}
+
+#button__add {
+    display: block;
+}
+
+#button__add.hide {
+    display: none;
+}
+
+#hidden {
+    display: none;
+}
+
+#hidden.show {
+    display: flex;
+}
+
+
+@media (max-width: 1000px) {
+    .items {
+        grid-template-columns: 24% 24% 24% 24%;
+    }
+}
+
+@media (max-width: 700px) {
+    .items {
+        grid-template-columns: 32% 32% 32%;
+    }
+}
+
+@media (max-width: 500px) {
+    .items {
+        grid-template-columns: 49% 49%;
+    }
+}
