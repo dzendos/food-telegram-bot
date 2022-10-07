@@ -1,6 +1,7 @@
 package queries
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -31,11 +32,6 @@ func New(tgClient QueriesHandler, token string) *Model {
 	}
 }
 
-func getRestaurant(writer http.ResponseWriter, request *http.Request) {
-	data := request.URL.Query()
-	log.Printf(request.URL.Query())
-}
-
 func validate(token string) func(writer http.ResponseWriter, request *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		ok, err := ext.ValidateWebAppQuery(request.URL.Query(), token)
@@ -53,6 +49,20 @@ func validate(token string) func(writer http.ResponseWriter, request *http.Reque
 }
 
 // Query getRestaurant -> (name, description, photo, methods of connections)
+func getRestaurant(writer http.ResponseWriter, request *http.Request) {
+	restaurants := []string{"Dodo", "MakDak", "KFC", "Мишлен"}
+
+	reqBody, err := json.Marshal(map[string][]string{
+		"Restaurants": restaurants,
+	})
+
+	if err != nil {
+		log.Println(err, "queries.getRestaurant")
+	}
+
+	log.Println(reqBody)
+	writer.Write(reqBody)
+}
 
 // Query getMenu restaurant -> (array of dishes(name, description, photo, maybe category))
 
