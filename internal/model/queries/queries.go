@@ -21,6 +21,8 @@ func New(tgClient QueriesHandler, token string) *Model {
 	mux.Handle("/", http.FileServer(http.Dir("./web/")))
 	mux.HandleFunc("/validate", validate(token))
 	mux.HandleFunc("/getRestaurant", getRestaurant)
+	mux.HandleFunc("/getMenu", getMenu)
+
 	server := http.Server{
 		Handler: mux,
 		Addr:    "0.0.0.0:8080",
@@ -62,6 +64,17 @@ func getRestaurant(writer http.ResponseWriter, request *http.Request) {
 
 	log.Println(reqBody)
 	writer.Write(reqBody)
+}
+
+type dish struct {
+	name      string
+	price     float64
+	dish_type string
+}
+
+func getMenu(writer http.ResponseWriter, request *http.Request) {
+	a := `[{"name":"хархок","price":500.5,"type":"первое"},{"name":"смузи","price":180.5,"type":"напиток"},{"name":"чай","price":12.5,"type":"напиток"},{"name":"борщ","price":210.5,"type":"первое"}]`
+	writer.Write([]byte(a))
 }
 
 // Query getMenu restaurant -> (array of dishes(name, description, photo, maybe category))
