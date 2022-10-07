@@ -1,4 +1,5 @@
 
+url = "https://94d3-188-130-155-166.eu.ngrok.io";
 
 let btnAdd = document.getElementById("button__add");
 let btnPlus = document.getElementById("button__plus");
@@ -6,6 +7,8 @@ let btnMinus = document.getElementById("button__minus");
 let countElem = document.getElementById("count");
 let count = 1;
 let elem = document.getElementById("hidden");
+
+is_validate = false;
 
 btnAdd.addEventListener('click', () => {
     btnAdd.classList.add("hide");
@@ -26,21 +29,40 @@ btnMinus.addEventListener('click', () => {
         count = 1;
     } else countElem.innerHTML = count; 
 })
-let aboba = document.getElementById("aboba");
-// aboba.innerHTML = "1";
+
+function parse_init_data(initData){
+    let data = {}
+    let params = initData.split("&");
+    for (let i = 0; i < params.length; i++){
+        tmp = params[i].split("=");
+        data[tmp[0]] = tmp[1]
+    }
+    
+    let output = "";
+    for (let key in data){
+        output += (key + "  :  " + data[key] + "\n");
+    }
+    return output
+}
+
+function create_item_html(){
+
+}
+
+function set_menu(menu){
+
+}
+
 Telegram.WebApp.ready();
-// aboba.innerHTML = "2";
 let initData = Telegram.WebApp.initData || '';
-// aboba.innerHTML = "3";
 let initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
-// aboba.innerHTML = "4";
-console.log("{{ .WebAppURL }}/validate?");
-// alert("your name is: " + Telegram.WebApp.initDataUnsafe.user.first_name)
-fetch("https://f865-188-130-155-154.eu.ngrok.io/validate?" + Telegram.WebApp.initData).then(function (response) {
+
+fetch(url + "/validate?" + Telegram.WebApp.initData).then(function (response) {
     return response.text();
 }).then(function (text) {
-    aboba.innerHTML = text;
-    // alert("result: " + text);
+    is_validate = true;
+
 }).catch(function () {
-    aboba.innerHTML = "cringe";
+    alert("Error on validation occured");
 });
+

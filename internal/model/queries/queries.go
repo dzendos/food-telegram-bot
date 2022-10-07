@@ -15,12 +15,11 @@ type Model struct {
 	Server   http.Server
 }
 
-var webappURL = "https://7af0-188-130-155-154.eu.ngrok.io"
-
 func New(tgClient QueriesHandler, token string) *Model {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("./web/")))
 	mux.HandleFunc("/validate", validate(token))
+	mux.HandleFunc("/getRestaurant", getRestaurant)
 	server := http.Server{
 		Handler: mux,
 		Addr:    "0.0.0.0:8080",
@@ -32,9 +31,13 @@ func New(tgClient QueriesHandler, token string) *Model {
 	}
 }
 
+func getRestaurant(writer http.ResponseWriter, request *http.Request) {
+	data := request.URL.Query()
+	log.Printf(request.URL.Query())
+}
+
 func validate(token string) func(writer http.ResponseWriter, request *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		log.Printf("%v", request)
 		ok, err := ext.ValidateWebAppQuery(request.URL.Query(), token)
 		if err != nil {
 			writer.Write([]byte("validation failed; error: " + err.Error()))
