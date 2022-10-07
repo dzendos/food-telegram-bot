@@ -1,34 +1,51 @@
 
 url = "https://94d3-188-130-155-166.eu.ngrok.io";
 
-let btnAdd = document.getElementById("button__add");
-let btnPlus = document.getElementById("button__plus");
-let btnMinus = document.getElementById("button__minus");
-let countElem = document.getElementById("count");
-let count = 1;
-let elem = document.getElementById("hidden");
+// let btnAdd = document.getElementById("button__add");
+// let btnPlus = document.getElementById("button__plus");
+// let btnMinus = document.getElementById("button__minus");
+// let countElem = document.getElementById("count");
+// let elem = document.getElementById("hidden");
 
 is_validate = false;
 
-btnAdd.addEventListener('click', () => {
-    btnAdd.classList.add("hide");
-    elem.classList.add("show");
+let dishes = [];
+let num_dishes = 0;
+
+function adding_listener() {
+
+    //button__add
+    let ind = parseInt(this.id.slice(11));
+    let btnAdd = document.getElementById("button__add"+ind);
+    let elem = document.getElementById("hidden" + ind);
+    let countElem = document.getElementById("count" + ind);
+    console.log()
+    btnAdd.style.display = "none";
+    elem.style.display = "flex";
     countElem.innerHTML = 1;
-})
+}
 
-btnPlus.addEventListener('click', () => {
-    count += 1;
-    countElem.innerHTML = count;
-})
+function plusing_listener(){
+    //button__plus
+    let ind = parseInt(this.id.slice(12));
+    let countElem = document.getElementById("count" + ind);
+    dishes[ind] += 1;
+    countElem.innerHTML = dishes[ind];
+}
 
-btnMinus.addEventListener('click', () => {
-    count -= 1;
-    if (count === 0) {
-        elem.classList.remove("show");
-        btnAdd.classList.remove("hide");
-        count = 1;
-    } else countElem.innerHTML = count; 
-})
+function minusing_listener(){
+    //button__minus
+    let ind = parseInt(this.id.slice(13));
+    let btnAdd = document.getElementById("button__add"+ind);
+    let elem = document.getElementById("hidden" + ind);
+    let countElem = document.getElementById("count" + ind);
+    dishes[ind] -= 1;
+    if (dishes[ind] === 0) {
+        elem.style.display = "none";
+        btnAdd.style.display = "block";
+        dishes[ind] = 1;
+    } else countElem.innerHTML = dishes[ind]; 
+}
 
 function parse_init_data(initData){
     let data = {}
@@ -45,12 +62,65 @@ function parse_init_data(initData){
     return output
 }
 
-function create_item_html(){
+function add_dish(data){
+    if ('content' in document.createElement('template')) {
+        const template = document.querySelector('#dish_template');
+        const cont = document.querySelector("#dish_container")
+        const clone = template.content.cloneNode(true);
+        let img = clone.querySelectorAll("img");
+        img[0].src = "https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=";
+        let dish_name_p = clone.getElementById("dish_name");
+        let dish_name_price = clone.getElementById("dish_price");
 
+        dish_name_p.textContent = data.name
+        dish_name_price.textContent = data.price + " руб.";
+
+        let hiden_div = clone.getElementById("hidden");
+        let count_p = clone.getElementById("count");
+        let add_btn = clone.getElementById("add");
+        let minus_btn = clone.getElementById("button__minus");
+        let plus_btn = clone.getElementById("button__plus");
+
+        count_p.id = "count" + num_dishes.toString();
+        add_btn.id = "button__add" + num_dishes.toString();
+        minus_btn.id = "button__minus" + num_dishes.toString();
+        plus_btn.id = "button__plus" + num_dishes.toString();
+        hiden_div.id = "hidden" + num_dishes.toString();
+
+        add_btn.addEventListener('click', adding_listener);
+        minus_btn.addEventListener('click', minusing_listener);
+        plus_btn.addEventListener('click', plusing_listener);
+
+        hiden_div.style.display = "none";
+        num_dishes++;
+        dishes.push(1)
+        cont.appendChild(clone)
+    }
+    else{
+        alert("help")
+    }
 }
 
-function set_menu(menu){
+function get_menu(restaurant){
+    fetch(url + "/getMenu?restaurant="+restaurant).then(response=>{
+        response.json().then(data=>{
+            for (let i = 0; i < data.length; i++){
+                add_dish(data[i]);
+            }
+        })
+    })
+}
 
+function get_restaurants(){
+    fetch(url + "/getRestaurant").then(function (response) {
+        response.json().then(data=>{
+            let s = "";
+            for (let i = 0; i < data["Restaurants"].length; i++){
+                s += data["Restaurants"][i] + " ";
+            }
+            alert("kavo\n" + s);
+        });
+    })
 }
 
 Telegram.WebApp.ready();
@@ -61,8 +131,9 @@ fetch(url + "/validate?" + Telegram.WebApp.initData).then(function (response) {
     return response.text();
 }).then(function (text) {
     is_validate = true;
-
 }).catch(function () {
     alert("Error on validation occured");
 });
 
+// get_restaurants()
+get_menu();

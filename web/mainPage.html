@@ -12,72 +12,38 @@
     <div class="title__block">
         <h1 id="aboba" class="title">Restaurant Name</h1>
     </div>
-    <div class="items">
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
-        <div class="item">
-            <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
-            <p class="item__name">Hawaii burger</p>
-            <button id="button__add" class="item__button" type="button">Add</button>
-            <div id="hidden" class="item__hidden">
-                <button id="button__minus" class="item__button__hide" type="button">-</button>
-                <p id="count" class="item__count">0</p>
-                <button id="button__plus" class="item__button__hide" type="button">+</button>
-            </div>
-        </div>
+    <div id="dish_container" class="items">
+        
     </div>
     <div class="footer">
         <button class="footer__link"><a href="./shoppingCard.html">Confirm</a></button>
     </div>
 </body>
 </html>
+<!-- 
+<div class="item">
+    <img class="item__image" src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=" alt="please, wait">
+    <p class="item__name">Hawaii burger</p>
+    <button id="button__add" class="item__button" type="button">Add</button>
+    <div id="hidden" class="item__hidden">
+        <button id="button__minus" class="item__button__hide" type="button">-</button>
+        <p id="count" class="item__count">0</p>
+        <button id="button__plus" class="item__button__hide" type="button">+</button>
+    </div>
+</div> -->
+
+<template id="dish_template">
+    <div class="item">
+        <img class="item__image" alt="please, wait">
+        <p id = "dish_name" class="item__name"> </p>
+        <p id = "dish_price" class="item__name">100 </p>
+        <button id="add" class="item__button" type="button">Add</button>
+        <div id="hidden" class="item__hidden">
+            <button id="button__minus" class="item__button__hide" type="button">-</button>
+            <p id="count" class="item__count">0</p>
+            <button id="button__plus" class="item__button__hide" type="button">+</button>
+        </div>
+    </div>
+</template>
 
 <script src="./mainPage.js"></script>
