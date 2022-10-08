@@ -18,7 +18,7 @@ let num_dishes = 0;
 
 let parsed_init_data = {};
 
-function count_sum(){
+function count_sum() {
     let sum = 0;
     for (let i = 0; i < num_dishes; i++){
         sum += dishes[i] * prices[i];
@@ -29,10 +29,10 @@ function count_sum(){
 function adding_listener() {
     //button__add
     let ind = parseInt(this.id.slice(11));
-    let btnAdd = document.getElementById("button__add"+ind);
+    let btnAdd = document.getElementById("button__add" + ind);
     let elem = document.getElementById("hidden" + ind);
     let countElem = document.getElementById("count" + ind);
-    console.log()
+    console.log();
     btnAdd.style.display = "none";
     elem.style.display = "flex";
     countElem.innerHTML = 1;
@@ -40,7 +40,7 @@ function adding_listener() {
     confirm_btn_text.textContent = "Подтвердить " + count_sum() + "руб";
 }
 
-function plusing_listener(){
+function plusing_listener() {
     //button__plus
     let ind = parseInt(this.id.slice(12));
     let countElem = document.getElementById("count" + ind);
@@ -62,15 +62,15 @@ function minusing_listener(){
         dishes[ind] = 0;
     } else countElem.innerHTML = dishes[ind]; 
     let sum = count_sum();
-    if (sum === 0){
+    if (sum === 0) {
         confirm_btn_text.textContent = "Отменить";
-    }else confirm_btn_text.textContent = "Подтвердить " + sum + "руб" 
+    } else confirm_btn_text.textContent = "Подтвердить " + sum + "руб" 
 }
 
-function confirm_btn_listenner(){
+function confirm_btn_listener(){
     let request = Object();
     let order = [];
-    for (let i = 0; i < num_dishes; i++){
+    for (let i = 0; i < num_dishes; i++) {
         if (dishes[i] != 0){
             let cur_dish = Object();
             cur_dish.PositionName = dish_names[i];
@@ -88,7 +88,7 @@ function confirm_btn_listenner(){
     xhr.send(request);
 }
 
-function parse_init_data(initData){
+function parse_init_data(initData) {
     let data = {}
     let params = initData.split("&");
     for (let i = 0; i < params.length; i++){
@@ -116,7 +116,7 @@ function add_dish(data){
         dish_name_p.textContent = data.name
         dish_name_price.textContent = data.price + " руб.";
 
-        let hiden_div = clone.getElementById("hidden");
+        let hidden_div = clone.getElementById("hidden");
         let count_p = clone.getElementById("count");
         let add_btn = clone.getElementById("add");
         let minus_btn = clone.getElementById("button__minus");
@@ -126,20 +126,19 @@ function add_dish(data){
         add_btn.id = "button__add" + num_dishes.toString();
         minus_btn.id = "button__minus" + num_dishes.toString();
         plus_btn.id = "button__plus" + num_dishes.toString();
-        hiden_div.id = "hidden" + num_dishes.toString();
+        hidden_div.id = "hidden" + num_dishes.toString();
 
         add_btn.addEventListener('click', adding_listener);
         minus_btn.addEventListener('click', minusing_listener);
         plus_btn.addEventListener('click', plusing_listener);
 
-        hiden_div.style.display = "none";
+        hidden_div.style.display = "none";
         num_dishes++;
         dishes.push(0);
         dish_names.push(data.name);
         prices.push(data.price);
         cont.appendChild(clone)
-    }
-    else{
+    } else {
         alert("help")
     }
 }
