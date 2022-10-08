@@ -1,5 +1,5 @@
 
-url = "https://94d3-188-130-155-166.eu.ngrok.io";
+url = "https://7936-188-130-155-154.eu.ngrok.io";
 
 // let btnAdd = document.getElementById("button__add");
 // let btnPlus = document.getElementById("button__plus");
@@ -12,8 +12,14 @@ is_validate = false;
 let dishes = [];
 let num_dishes = 0;
 
-function adding_listener() {
+let parsed_init_data = {};
 
+function count_sum(){
+    let sum = 0;
+    for (let i = 0; i < )
+}
+
+function adding_listener() {
     //button__add
     let ind = parseInt(this.id.slice(11));
     let btnAdd = document.getElementById("button__add"+ind);
@@ -54,12 +60,12 @@ function parse_init_data(initData){
         tmp = params[i].split("=");
         data[tmp[0]] = tmp[1]
     }
-    
-    let output = "";
-    for (let key in data){
-        output += (key + "  :  " + data[key] + "\n");
-    }
-    return output
+    let user_data = decodeURI(data.user);
+    user_data = user_data.replaceAll("%3A",":");
+    user_data = user_data.replaceAll("%2C",",");
+    user_data = JSON.parse(user_data);
+    data.user = user_data;
+    return data
 }
 
 function add_dish(data){
@@ -101,7 +107,7 @@ function add_dish(data){
     }
 }
 
-function get_menu(restaurant){
+function set_menu(restaurant){
     fetch(url + "/getMenu?restaurant="+restaurant).then(response=>{
         response.json().then(data=>{
             for (let i = 0; i < data.length; i++){
@@ -123,6 +129,20 @@ function get_restaurants(){
     })
 }
 
+function get_user_restaurant(){
+    fetch(url + "/get_user_restaurant").then(function (response) {
+        response.json().then(data=>{
+            let s = "";
+            for (let i = 0; i < data["Restaurants"].length; i++){
+                s += data["Restaurants"][i] + " ";
+            }
+            alert("kavo\n" + s);
+        });
+    }).catch(function(){
+        alert("Error during geting user restaurant")
+    })
+}
+
 Telegram.WebApp.ready();
 let initData = Telegram.WebApp.initData || '';
 let initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
@@ -131,9 +151,11 @@ fetch(url + "/validate?" + Telegram.WebApp.initData).then(function (response) {
     return response.text();
 }).then(function (text) {
     is_validate = true;
+    parsed_init_data = parse_init_data(initData);
+    // get_user_restaurant()
+    set_menu();
 }).catch(function () {
     alert("Error on validation occured");
 });
 
 // get_restaurants()
-get_menu();
