@@ -16,59 +16,8 @@
     <div class="back">
         <a class="back__link" href="./mainPage.html">Back to the menu</a>
     </div>
-    <div class="list">
-        <div id="element1" class="list__element">
-            <div class="list__item">
-                <div class="list__text">Hawaii burger</div>
-                <div class="list__change">
-                    <button id="item__minus" class="list__button" type="button">-</button>
-                    <p id="item__count" class="list__count">2</p>
-                    <button id="item__plus" class="list__button" type="button">+</button>
-                </div>
-            </div>
-            <div class="list__under">
-                <p>576 x 20 = 5321 руб.</p>
-            </div>
-        </div>
-        <div id="element2" class="list__element">
-            <div class="list__item">
-                <div class="list__text">Hawaii burger</div>
-                <div class="list__change">
-                    <button id="item__minus" class="list__button" type="button">-</button>
-                    <p id="item__count1" class="list__count">2</p>
-                    <button id="item__plus" class="list__button" type="button">+</button>
-                </div>
-            </div>
-            <div class="list__under">
-                <p>576 x 20 = 5321 руб.</p>
-            </div>
-        </div>
-        <div id="element3" class="list__element">
-            <div class="list__item">
-                <div class="list__text">Hawaii burger</div>
-                <div class="list__change">
-                    <button id="item__minus" class="list__button" type="button">-</button>
-                    <p id="item__count2" class="list__count">2</p>
-                    <button id="item__plus" class="list__button" type="button">+</button>
-                </div>
-            </div>
-            <div class="list__under">
-                <p>576 x 20 = 5321 руб.</p>
-            </div>
-        </div>
-        <div id="element4" class="list__element">
-            <div class="list__item">
-                <div class="list__text">Hawaii burger</div>
-                <div class="list__change">
-                    <button id="item__minus" class="list__button" type="button">-</button>
-                    <p id="item__count3" class="list__count">2</p>
-                    <button id="item__plus" class="list__button" type="button">+</button>
-                </div>
-            </div>
-            <div class="list__under">
-                <p>576 x 20 = 5321 руб.</p>
-            </div>
-        </div>
+    <div id = "list__dishes" class="list">
+        
     </div>
     <div class="footer">
         <button class="footer__link"><a href="./shoppingCart.html">Buy</a></button>
@@ -76,5 +25,21 @@
 </body>
 </html>
 
+
+<template id = "dish__element__template">
+    <div id="element" class="list__element">
+        <div class="list__item">
+            <div id = "dish_name" class="list__text"></div>
+            <div class="list__change">
+                <button id="item__minus" class="list__button" type="button">-</button>
+                <p id="item__count" class="list__count">1</p>
+                <button id="item__plus" class="list__button" type="button">+</button>
+            </div>
+        </div>
+        <div class="list__under">
+            <p id = "dish__sum">576 x 20 = 5321 руб.</p>
+        </div>
+    </div>    
+</template>
 
 <script src="./shoppingCart.js"></script>

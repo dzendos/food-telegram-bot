@@ -72,6 +72,7 @@ func getRestaurant(writer http.ResponseWriter, request *http.Request) {
 	writer.Write(reqBody)
 }
 
+
 type getMenuQuery struct {
 	UserID     int64  `json:"UserID"`
 	Restaurant string `json:"Restaurant"`
