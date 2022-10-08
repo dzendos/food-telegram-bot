@@ -51,7 +51,7 @@ func SetUserOrder(order *Order) {
 }
 
 func GetRestaurantByName(restaurantName string) (*restaurant.Restaurant, error) {
-	for _, restaurant := range serverState.Restaurants {
+	for _, restaurant := range ServerState.Restaurants {
 		if restaurant.Name == restaurantName {
 			return restaurant, nil
 		}
@@ -75,7 +75,7 @@ func GetPositionPrice(userID int64, positionName string) float64 {
 	return -1
 }
 
-var serverState = ServerStateType{}
+var ServerState = ServerStateType{}
 
 type ServerStateType struct {
 	Restaurants []*restaurant.Restaurant
