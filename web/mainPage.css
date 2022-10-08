@@ -135,6 +135,7 @@ body {
     font-size: 25px;
     text-decoration: none;
     transition: .3s linear;
+    min-width: 300px;
 }
 .footer__link a {
     font-family: 'Oswald';

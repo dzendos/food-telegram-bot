@@ -7,16 +7,23 @@ url = "https://7936-188-130-155-154.eu.ngrok.io";
 // let countElem = document.getElementById("count");
 // let elem = document.getElementById("hidden");
 
+let confirm_btn_text = document.getElementById("button__confirm__text");
+
 is_validate = false;
 
 let dishes = [];
+let prices = [];
+let dish_names = [];
 let num_dishes = 0;
 
 let parsed_init_data = {};
 
 function count_sum(){
     let sum = 0;
-    for (let i = 0; i < )
+    for (let i = 0; i < num_dishes; i++){
+        sum += dishes[i] * prices[i];
+    }
+    return sum;
 }
 
 function adding_listener() {
@@ -29,6 +36,8 @@ function adding_listener() {
     btnAdd.style.display = "none";
     elem.style.display = "flex";
     countElem.innerHTML = 1;
+    dishes[ind] = 1;
+    confirm_btn_text.textContent = "Подтвердить " + count_sum() + "руб";
 }
 
 function plusing_listener(){
@@ -37,6 +46,7 @@ function plusing_listener(){
     let countElem = document.getElementById("count" + ind);
     dishes[ind] += 1;
     countElem.innerHTML = dishes[ind];
+    confirm_btn_text.textContent = "Подтвердить " + count_sum() + "руб";
 }
 
 function minusing_listener(){
@@ -49,8 +59,33 @@ function minusing_listener(){
     if (dishes[ind] === 0) {
         elem.style.display = "none";
         btnAdd.style.display = "block";
-        dishes[ind] = 1;
+        dishes[ind] = 0;
     } else countElem.innerHTML = dishes[ind]; 
+    let sum = count_sum();
+    if (sum === 0){
+        confirm_btn_text.textContent = "Отменить";
+    }else confirm_btn_text.textContent = "Подтвердить " + sum + "руб" 
+}
+
+function confirm_btn_listenner(){
+    let request = Object();
+    let order = [];
+    for (let i = 0; i < num_dishes; i++){
+        if (dishes[i] != 0){
+            let cur_dish = Object();
+            cur_dish.PositionName = dish_names[i];
+            cur_dish.PositionAmount = dishes[i];
+            order.push(cur_dish);
+        }
+    }
+    request.UserID = parse_init_data.user.id
+    request.Order = order;
+    request = JSON.stringify(request)
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader('sendOrder', 'application/json');
+    xhr.send(request);
 }
 
 function parse_init_data(initData){
@@ -99,7 +134,9 @@ function add_dish(data){
 
         hiden_div.style.display = "none";
         num_dishes++;
-        dishes.push(1)
+        dishes.push(0);
+        dish_names.push(data.name);
+        prices.push(data.price);
         cont.appendChild(clone)
     }
     else{
@@ -110,6 +147,7 @@ function add_dish(data){
 function set_menu(restaurant){
     fetch(url + "/getMenu?restaurant="+restaurant).then(response=>{
         response.json().then(data=>{
+            data = data.menu;
             for (let i = 0; i < data.length; i++){
                 add_dish(data[i]);
             }
