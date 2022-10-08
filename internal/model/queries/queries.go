@@ -1,11 +1,15 @@
 package queries
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/dzendos/dubna/internal/model/position"
+	"github.com/dzendos/dubna/internal/model/state"
 )
 
 type QueriesHandler interface {
@@ -22,6 +26,8 @@ func New(tgClient QueriesHandler, token string) *Model {
 	mux.HandleFunc("/validate", validate(token))
 	mux.HandleFunc("/getRestaurant", getRestaurant)
 	mux.HandleFunc("/getMenu", getMenu)
+	mux.HandleFunc("/sendOrder", orderIsReady)
+	mux.HandleFunc("/getOrder", getOrder)
 
 	server := http.Server{
 		Handler: mux,
@@ -66,17 +72,137 @@ func getRestaurant(writer http.ResponseWriter, request *http.Request) {
 	writer.Write(reqBody)
 }
 
-type dish struct {
-	name      string
-	price     float64
-	dish_type string
+
+type getMenuQuery struct {
+	UserID     int64  `json:"UserID"`
+	Restaurant string `json:"Restaurant"`
 }
 
+// Query getMenu (userID, restaurant) -> (array of dishes(name, description, photo, maybe category))
 func getMenu(writer http.ResponseWriter, request *http.Request) {
-	a := `[{"name":"хархок","price":500.5,"type":"первое"},{"name":"смузи","price":180.5,"type":"напиток"},{"name":"чай","price":12.5,"type":"напиток"},{"name":"борщ","price":210.5,"type":"первое"}]`
-	writer.Write([]byte(a))
+	body, err := io.ReadAll(request.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	userID, restaurantName := encodeGetMenuQuery(body)
+
+	state.SetUserRestaurant(userID, restaurantName)
+	restaurant, _ := state.GetRestaurantByName(restaurantName)
+
+	var answer = map[string][]*position.Position{
+		"menu": restaurant.Menu.Positions,
+	}
+
+	reqBody, err := json.Marshal(answer)
+
+	if err != nil {
+		log.Println(err, "queries.getMenu")
+	}
+
+	log.Println(string(reqBody))
+	writer.Write(reqBody)
 }
 
-// Query getMenu restaurant -> (array of dishes(name, description, photo, maybe category))
+func encodeGetMenuQuery(body []byte) (int64, string) {
+	restaurant := getMenuQuery{}
+
+	reader := bytes.NewReader(body)
+	decoder := json.NewDecoder(reader)
+	err := decoder.Decode(&restaurant)
+
+	if err != nil {
+		return -1, ""
+	}
+
+	return restaurant.UserID, restaurant.Restaurant
+}
 
 // Query orderIsReady -> restaurant -> (array of dishes(by id?))
+func orderIsReady(writer http.ResponseWriter, request *http.Request) {
+	body, err := io.ReadAll(request.Body)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	order := encodeOrderIsReady(body)
+
+	state.SetUserOrder(order)
+}
+
+func encodeOrderIsReady(body []byte) *state.Order {
+	order := state.Order{}
+
+	reader := bytes.NewReader(body)
+	decoder := json.NewDecoder(reader)
+	err := decoder.Decode(&order)
+
+	if err != nil {
+		return nil
+	}
+
+	return &order
+}
+
+type RetOrderPosition struct {
+	Name   string  `json:"PositionName"`
+	Amount int     `json:"PositionAmount"`
+	Price  float64 `json:"PositionPrice"`
+}
+
+type orderToReturn struct {
+	Order []RetOrderPosition `json:"Order"`
+}
+
+func getOrder(writer http.ResponseWriter, request *http.Request) {
+	body, err := io.ReadAll(request.Body)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	userID := encodeUserID(body)
+
+	usersOrder := state.GetUserOrder(userID)
+	if usersOrder == nil {
+		log.Println("this user does not have an order")
+		return
+	}
+
+	order := orderToReturn{}
+	for _, position := range usersOrder {
+		order.Order = append(order.Order, RetOrderPosition{
+			Name:   position.Name,
+			Amount: position.Amount,
+			Price:  state.GetPositionPrice(userID, position.Name),
+		})
+	}
+
+	reqBody, err := json.Marshal(order)
+
+	if err != nil {
+		log.Println(err, "queries.getMenu")
+	}
+
+	log.Println(string(reqBody))
+	writer.Write(reqBody)
+}
+
+type userIDType struct {
+	UserID int64 `json:"UserID"`
+}
+
+func encodeUserID(body []byte) int64 {
+	userID := userIDType{}
+
+	reader := bytes.NewReader(body)
+	decoder := json.NewDecoder(reader)
+	err := decoder.Decode(&userID)
+
+	if err != nil {
+		return -1
+	}
+
+	return userID.UserID
+}
