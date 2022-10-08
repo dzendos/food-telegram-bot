@@ -9,7 +9,7 @@ data = {
 }
 
 const btnListener = () => {
-    alert("fuck you" + id);
+    alert("fuck you");
 }
 
 
