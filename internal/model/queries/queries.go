@@ -21,24 +21,26 @@ type Model struct {
 }
 
 func New(tgClient QueriesHandler, token string) *Model {
+	var s Model
+
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("./web/")))
 	mux.HandleFunc("/validate", validate(token))
-	mux.HandleFunc("/getRestaurants", getRestaurant)
-	mux.HandleFunc("/sendRestaurant", sendRestaurant)
-	mux.HandleFunc("/getMenu", getMenu)
-	mux.HandleFunc("/sendOrder", orderIsReady)
-	mux.HandleFunc("/getOrder", getOrder)
+	mux.HandleFunc("/getRestaurants", s.getRestaurant)
+	mux.HandleFunc("/sendRestaurant", s.sendRestaurant)
+	mux.HandleFunc("/getMenu", s.getMenu)
+	mux.HandleFunc("/sendOrder", s.orderIsReady)
+	mux.HandleFunc("/getOrder", s.getOrder)
 
 	server := http.Server{
 		Handler: mux,
 		Addr:    "0.0.0.0:8080",
 	}
 
-	return &Model{
-		tgClient: tgClient,
-		Server:   server,
-	}
+	s.tgClient = tgClient
+	s.Server = server
+
+	return &s
 }
 
 func validate(token string) func(writer http.ResponseWriter, request *http.Request) {
@@ -67,7 +69,7 @@ type restaurantsQuery struct {
 }
 
 // Query getRestaurant -> (name, description, photo, methods of connections)
-func getRestaurant(writer http.ResponseWriter, request *http.Request) {
+func (s *Model) getRestaurant(writer http.ResponseWriter, request *http.Request) {
 	restaurants := restaurantsQuery{}
 
 	for _, restaurant := range state.ServerState.Restaurants {
@@ -92,7 +94,7 @@ type getMenuQuery struct {
 	Restaurant string `json:"Restaurant"`
 }
 
-func sendRestaurant(writer http.ResponseWriter, request *http.Request) {
+func (s *Model) sendRestaurant(writer http.ResponseWriter, request *http.Request) {
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		log.Println(err)
@@ -109,7 +111,7 @@ type returnMenuQuery struct {
 }
 
 // Query getMenu (userID, restaurant) -> (array of dishes(name, description, photo, maybe category))
-func getMenu(writer http.ResponseWriter, request *http.Request) {
+func (s *Model) getMenu(writer http.ResponseWriter, request *http.Request) {
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		log.Println(err)
@@ -148,7 +150,7 @@ func encodeGetMenuQuery(body []byte) (int64, string) {
 }
 
 // Query orderIsReady -> restaurant -> (array of dishes(by id?))
-func orderIsReady(writer http.ResponseWriter, request *http.Request) {
+func (s *Model) orderIsReady(writer http.ResponseWriter, request *http.Request) {
 	body, err := io.ReadAll(request.Body)
 
 	if err != nil {
@@ -184,7 +186,7 @@ type orderToReturn struct {
 	Order []RetOrderPosition `json:"Order"`
 }
 
-func getOrder(writer http.ResponseWriter, request *http.Request) {
+func (s *Model) getOrder(writer http.ResponseWriter, request *http.Request) {
 	body, err := io.ReadAll(request.Body)
 
 	if err != nil {

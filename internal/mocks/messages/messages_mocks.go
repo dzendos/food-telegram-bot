@@ -46,3 +46,17 @@ func (mr *MockMessageSenderMockRecorder) SendReference(text, userID interface{})
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendReference", reflect.TypeOf((*MockMessageSender)(nil).SendReference), text, userID)
 }
+
+// SetTransactionMessage mocks base method.
+func (m *MockMessageSender) SetTransactionMessage(text string, userID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetTransactionMessage", text, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetTransactionMessage indicates an expected call of SetTransactionMessage.
+func (mr *MockMessageSenderMockRecorder) SetTransactionMessage(text, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTransactionMessage", reflect.TypeOf((*MockMessageSender)(nil).SetTransactionMessage), text, userID)
+}

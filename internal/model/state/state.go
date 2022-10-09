@@ -8,9 +8,21 @@ import (
 
 var userState = make(map[int64]UserStateType)
 
+type State int
+
+const (
+	RestaurantReference = "https://94d3-188-130-155-166.eu.ngrok.io/restaurantPage.html"
+	MenuReference       = "https://94d3-188-130-155-166.eu.ngrok.io/mainPage.html"
+)
+
+const (
+	EditTransaction State = iota + 1
+)
+
 type UserStateType struct {
 	CurrentRestaurant *restaurant.Restaurant
 	CurrentOrder      []OrderPosition
+	EditState         State
 }
 
 type OrderPosition struct {
@@ -21,6 +33,11 @@ type OrderPosition struct {
 type Order struct {
 	UserID int64           `json:"UserID"`
 	Order  []OrderPosition `json:"Order"`
+}
+
+func GetUserState(userID int64) (UserStateType, bool) {
+	state, ok := userState[userID]
+	return state, ok
 }
 
 func SetUserRestaurant(userID int64, restaurantName string) error {
@@ -42,6 +59,16 @@ func SetUserRestaurant(userID int64, restaurantName string) error {
 
 func GetUserRestaurant(userID int64) *restaurant.Restaurant {
 	return userState[userID].CurrentRestaurant
+}
+
+func SetState(userID int64, st State) {
+	state, ok := userState[userID]
+
+	if !ok {
+		state = UserStateType{}
+	}
+
+	state.EditState = st
 }
 
 func SetUserOrder(order *Order) {

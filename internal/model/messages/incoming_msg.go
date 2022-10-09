@@ -1,7 +1,10 @@
 package messages
 
+import "github.com/dzendos/dubna/internal/model/state"
+
 type MessageSender interface {
 	SendReference(text string, userID int64) error
+	SetTransactionMessage(text string, userID int64) error
 }
 
 type Model struct {
@@ -24,7 +27,21 @@ func (s *Model) IncomingMessage(msg *Message) error {
 	// Trying to recognize the command.
 	switch msg.Text {
 	case "/start":
-		return s.tgClient.SendReference("hello", msg.UserID)
+	case "/new_order":
+		return s.newOrder(msg)
+	case "/get_report":
+		return s.getReport(msg)
+	case "/set_transaction_message":
+		return s.toEditState(msg.UserID)
+	case "/cancel_order":
+		return nil
+	}
+
+	if userState, ok := state.GetUserState(msg.UserID); ok {
+		switch userState.EditState {
+		case state.EditTransaction:
+			return s.transactionEntered(msg)
+		}
 	}
 
 	// It is not a known command - maybe it is message to change the state.

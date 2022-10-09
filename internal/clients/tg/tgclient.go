@@ -76,14 +76,36 @@ func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
 	return nil
 }
 
+func (c *Client) ShowNotification(text string, userID int64, callbackID string) error {
+	_, err := c.bot.AnswerCallbackQuery(callbackID, &tgbotapi.AnswerCallbackQueryOpts{
+		Text: text,
+	})
+
+	if err != nil {
+		return errors.Wrap(err, "client.ShowNotification")
+	}
+	return nil
+}
+
 func (c *Client) SendReference(text string, userID int64) error {
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: shopKeyboard,
+		ReplyMarkup: chooseRestaurantKeyboard,
 	})
 
 	if err != nil {
 		return errors.Wrap(err, "client.Send")
+	}
+	return nil
+}
+
+func (c *Client) SetTransactionMessage(text string, userID int64) error {
+	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
+		ReplyMarkup: editTransactionKeyboard,
+	})
+
+	if err != nil {
+		return errors.Wrap(err, "client.SetTransactionMessage")
 	}
 	return nil
 }

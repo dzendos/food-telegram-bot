@@ -5,11 +5,12 @@ import (
 )
 
 const (
-// Place for keyboards data
+	EditTransaction = "EditTransaction"
 )
 
 type CallbackHandler interface {
 	SendReference(text string, userID int64) error
+	ShowNotification(text string, userID int64, callbackID string) error
 }
 
 type Model struct {
@@ -31,7 +32,8 @@ type CallbackData struct {
 
 func (s *Model) IncomingCallback(data *CallbackData) error {
 	switch data.Data {
-
+	case EditTransaction:
+		s.toEditTransactionState(data)
 	}
 
 	return errors.New("Callback handler for data '" + data.Data + "' was not found.")
