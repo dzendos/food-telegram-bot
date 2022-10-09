@@ -62,6 +62,9 @@ func SetUserRestaurant(userID int64, restaurantName string) error {
 	}
 
 	state.CurrentRestaurant = restaurant
+	state.OrderOrganizerID = userID
+
+	UserState[userID] = state
 
 	return nil
 }
@@ -78,6 +81,7 @@ func SetState(userID int64, st State) {
 	}
 
 	state.EditState = st
+	UserState[userID] = state
 }
 
 func SetUserOrder(order *Order) {
@@ -88,6 +92,7 @@ func SetUserOrder(order *Order) {
 	}
 
 	state.CurrentOrder = order.Order
+	UserState[order.UserID] = state
 }
 
 func GetRestaurantByName(restaurantName string) (*restaurant.Restaurant, error) {
