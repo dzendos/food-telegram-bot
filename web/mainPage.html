@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="title__block">
-        <h1 id="aboba" class="title">Restaurant Name</h1>
+        <h1 id="restaurant__title" class="title">Restaurant Name</h1>
     </div>
     <div id="dish_container" class="items">
         
@@ -23,14 +23,18 @@
 
 <template id="dish_template">
     <div class="item">
-        <img class="item__image" alt="please, wait">
-        <p id = "dish_name" class="item__name"> </p>
-        <p id = "dish_price" class="item__name">100 </p>
-        <button id="add" class="item__button" type="button">Add</button>
-        <div id="hidden" class="item__hidden">
-            <button id="button__minus" class="item__button__hide" type="button">-</button>
-            <p id="count" class="item__count">0</p>
-            <button id="button__plus" class="item__button__hide" type="button">+</button>
+        <div>
+            <img class="item__image" alt="please, wait">
+        </div>
+        <div>
+            <p id = "dish_name" class="item__name"> </p>
+            <p id = "dish_price" class="item__name__count">100 </p>
+            <button id="add" class="item__button" type="button">Добавить</button>
+            <div id="hidden" class="item__hidden">
+                <button id="button__minus" class="item__button__hide" type="button">-</button>
+                <p id="count" class="item__count">0</p>
+                <button id="button__plus" class="item__button__hide" type="button">+</button>
+            </div>
         </div>
     </div>
 </template>

@@ -1,5 +1,5 @@
 
-url = "https://8f82-188-130-155-154.eu.ngrok.io";
+url = "https://c7d5-188-130-155-154.eu.ngrok.io";
 
 // let btnAdd = document.getElementById("button__add");
 // let btnPlus = document.getElementById("button__plus");
@@ -8,9 +8,11 @@ url = "https://8f82-188-130-155-154.eu.ngrok.io";
 // let elem = document.getElementById("hidden");
 
 let confirm_btn_text = document.getElementById("button__confirm__text");
-let confirm_btn = document.getElementById("button__confirm")
+let confirm_btn = document.getElementById("button__confirm");
+let restaurant_title = document.getElementById("restaurant__title");
 is_validate = false;
 
+let restaurant_name = "";
 let dishes = [];
 let prices = [];
 let dish_names = [];
@@ -86,6 +88,8 @@ function confirm_btn_listener(){
     xhr.open("POST", url + "/sendOrder", false);
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(request);
+    window.open(url + "/shoppingCard.html","_self")
+
 }
 
 function parse_init_data(initData) {
@@ -144,14 +148,24 @@ function add_dish(data){
 }
 
 function set_menu(id){
-    fetch(url + "/getMenu?id=" + id).then(response=>{
-        response.json().then(data=>{
-            data = data.menu;
-            for (let i = 0; i < data.length; i++){
-                add_dish(data[i]);
+    let request = new Object();
+    request.UserID = id;
+    request = JSON.stringify(request);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            let data = JSON.parse(xhr.response);
+            console.log(restaurant_title);
+            restaurant_title.textContent = data.Restaurant;
+            for (let i = 0; i < data.Menu.length; i++){
+                add_dish(data.Menu[i])
             }
-        })
-    })
+        }
+    }
+    xhr.open("POST", url + "/getMenu", true);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(request);
+
 }
 
 function get_restaurants(){
@@ -191,7 +205,7 @@ fetch(url + "/validate?" + Telegram.WebApp.initData).then(function (response) {
     is_validate = true;
     parsed_init_data = parse_init_data(initData);
     // get_user_restaurant()
-    set_menu(351902890);
+    set_menu(initDataUnsafe.user.id);
 }).catch(function () {
     alert("Error on validation occured");
 });
