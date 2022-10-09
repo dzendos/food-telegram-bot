@@ -8,6 +8,14 @@ let num_dishes = [];
 let prices_dishes = [];
 let dish_names = [];
 
+let back_btn = document.getElementById("back__button");
+
+function back__button(){
+    Telegram.WebApp.openLink(url + "/mainPage.html")
+}
+
+back_btn.addEventListener("click", back__button);
+
 function plus_listener(){
     //item__plus
     let ind = parseInt(this.id.slice(10));

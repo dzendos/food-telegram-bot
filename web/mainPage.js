@@ -88,7 +88,8 @@ function confirm_btn_listener(){
     xhr.open("POST", url + "/sendOrder", false);
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(request);
-    window.open(url + "/shoppingCard.html","_self")
+    Telegram.WebApp.openLink(url + "/shoppingCard.html")
+    // window.open(url + "/shoppingCard.html","_self")
 
 }
 
