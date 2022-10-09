@@ -1,6 +1,10 @@
 package messages
 
-import "github.com/dzendos/dubna/internal/model/state"
+import (
+	"log"
+
+	"github.com/dzendos/dubna/internal/model/state"
+)
 
 type MessageSender interface {
 	SendReference(text string, userID int64) error
@@ -24,9 +28,11 @@ type Message struct {
 }
 
 func (s *Model) IncomingMessage(msg *Message) error {
+	log.Println(msg)
 	// Trying to recognize the command.
 	switch msg.Text {
 	case "/start":
+		return nil
 	case "/new_order":
 		return s.newOrder(msg)
 	case "/get_report":

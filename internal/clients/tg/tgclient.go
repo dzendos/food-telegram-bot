@@ -88,6 +88,7 @@ func (c *Client) ShowNotification(text string, userID int64, callbackID string) 
 }
 
 func (c *Client) SendReference(text string, userID int64) error {
+	log.Println("SenD=Ref")
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
 		ReplyMarkup: chooseRestaurantKeyboard,
@@ -115,6 +116,10 @@ func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callback
 	c.callbackModel = callbackModel
 
 	c.dispatcher.AddHandler(handlers.NewCommand("start", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("new_order", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("get_report", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("set_transaction_message", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("cancel_order", incomingUpdate))
 
 	err := c.updater.StartPolling(c.bot, &ext.PollingOpts{DropPendingUpdates: true})
 	if err != nil {

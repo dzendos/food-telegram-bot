@@ -11,8 +11,8 @@ var userState = make(map[int64]UserStateType)
 type State int
 
 const (
-	RestaurantReference = "https://94d3-188-130-155-166.eu.ngrok.io/restaurantPage.html"
-	MenuReference       = "https://94d3-188-130-155-166.eu.ngrok.io/mainPage.html"
+	RestaurantReference = "https://c7d5-188-130-155-154.eu.ngrok.io/restaurantPage.html"
+	MenuReference       = "https://c7d5-188-130-155-154.eu.ngrok.io/mainPage.html"
 )
 
 const (

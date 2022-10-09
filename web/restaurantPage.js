@@ -33,8 +33,8 @@ function btnListener(){
     console.log(this.id)
     let id = parseInt(this.id.slice(18));
     sendRestaurant(restaurant_names[id])
-    window.open(url + "/mainPage.html","_self")
-
+    // window.open(url + "/mainPage.html","_self")
+    Telegram.WebApp.close()
 }
 
 
