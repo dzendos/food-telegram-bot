@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-var userState = make(map[int64]UserStateType)
+var UserState = make(map[int64]UserStateType)
 
 type State int
 
@@ -23,6 +23,15 @@ type UserStateType struct {
 	CurrentRestaurant *restaurant.Restaurant
 	CurrentOrder      []OrderPosition
 	EditState         State
+	OrderOrganizerID  int64
+}
+
+func NewUserState(r *restaurant.Restaurant, o []OrderPosition, id int64) UserStateType {
+	return UserStateType{
+		CurrentRestaurant: r,
+		CurrentOrder:      o,
+		OrderOrganizerID:  id,
+	}
 }
 
 type OrderPosition struct {
@@ -36,7 +45,7 @@ type Order struct {
 }
 
 func GetUserState(userID int64) (UserStateType, bool) {
-	state, ok := userState[userID]
+	state, ok := UserState[userID]
 	return state, ok
 }
 
@@ -46,7 +55,7 @@ func SetUserRestaurant(userID int64, restaurantName string) error {
 		return errors.Wrap(err, "state.SetUserRestaurant")
 	}
 
-	state, ok := userState[userID]
+	state, ok := UserState[userID]
 
 	if !ok {
 		state = UserStateType{}
@@ -58,11 +67,11 @@ func SetUserRestaurant(userID int64, restaurantName string) error {
 }
 
 func GetUserRestaurant(userID int64) *restaurant.Restaurant {
-	return userState[userID].CurrentRestaurant
+	return UserState[userID].CurrentRestaurant
 }
 
 func SetState(userID int64, st State) {
-	state, ok := userState[userID]
+	state, ok := UserState[userID]
 
 	if !ok {
 		state = UserStateType{}
@@ -72,7 +81,7 @@ func SetState(userID int64, st State) {
 }
 
 func SetUserOrder(order *Order) {
-	state, ok := userState[order.UserID]
+	state, ok := UserState[order.UserID]
 
 	if !ok {
 		state = UserStateType{}
@@ -92,11 +101,11 @@ func GetRestaurantByName(restaurantName string) (*restaurant.Restaurant, error) 
 }
 
 func GetUserOrder(userID int64) []OrderPosition {
-	return userState[userID].CurrentOrder
+	return UserState[userID].CurrentOrder
 }
 
 func GetPositionPrice(userID int64, positionName string) float64 {
-	restaurant := userState[userID].CurrentRestaurant
+	restaurant := UserState[userID].CurrentRestaurant
 	for _, position := range restaurant.Menu.Positions {
 		if position.Name == positionName {
 			return position.Price

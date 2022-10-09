@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/dzendos/dubna/internal/model/position"
@@ -13,6 +14,7 @@ import (
 )
 
 type QueriesHandler interface {
+	SendRestaurantMenu(userID int64) error
 }
 
 type Model struct {
@@ -103,6 +105,9 @@ func (s *Model) sendRestaurant(writer http.ResponseWriter, request *http.Request
 	userID, restaurantName := encodeGetMenuQuery(body)
 
 	state.SetUserRestaurant(userID, restaurantName)
+
+	// Send user reference to the menu of the restaurant
+	s.tgClient.SendRestaurantMenu(userID)
 }
 
 type returnMenuQuery struct {
@@ -119,6 +124,11 @@ func (s *Model) getMenu(writer http.ResponseWriter, request *http.Request) {
 
 	userID := encodeUserID(body)
 	restaurant := state.GetUserRestaurant(userID)
+
+	if restaurant == nil {
+		time.Sleep(3 * time.Millisecond)
+		restaurant = state.GetUserRestaurant(userID)
+	}
 
 	var answer = returnMenuQuery{
 		RestaurantName: restaurant.Name,

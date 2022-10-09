@@ -6,6 +6,7 @@ import (
 	tgbotapi "github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
 	"github.com/pkg/errors"
@@ -61,10 +62,12 @@ func New(tokenGetter tokenGetter) (*Client, error) {
 }
 
 func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
-	log.Printf("update caught: %s", ctx.Message.Text)
-
 	if ctx.CallbackQuery != nil {
-
+		tgClient.callbackModel.IncomingCallback(&callbacks.CallbackData{
+			FromID:     ctx.CallbackQuery.From.Id,
+			Data:       ctx.CallbackQuery.Data,
+			CallbackID: ctx.CallbackQuery.Id,
+		})
 	} else if ctx.Message != nil {
 		tgClient.msgModel.IncomingMessage(&messages.Message{
 			Text:      ctx.Message.Text,
@@ -95,7 +98,7 @@ func (c *Client) SendReference(text string, userID int64) error {
 	})
 
 	if err != nil {
-		return errors.Wrap(err, "client.Send")
+		return errors.Wrap(err, "client.SendRef")
 	}
 	return nil
 }
@@ -111,6 +114,19 @@ func (c *Client) SetTransactionMessage(text string, userID int64) error {
 	return nil
 }
 
+func (c *Client) SendRestaurantMenu(userID int64) error {
+	log.Println("asdad")
+	_, err := c.bot.SendMessage(userID, "Меню готово! Перешлите сообщение для того чтобы поделиться заказом с друзьями", &tgbotapi.SendMessageOpts{
+		ParseMode:   "HTML",
+		ReplyMarkup: getMenuKeyboard(userID),
+	})
+
+	if err != nil {
+		return errors.Wrap(err, "client.Send")
+	}
+	return nil
+}
+
 func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callbacks.Model) {
 	c.msgModel = msgModel
 	c.callbackModel = callbackModel
@@ -120,6 +136,7 @@ func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callback
 	c.dispatcher.AddHandler(handlers.NewCommand("get_report", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("set_transaction_message", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("cancel_order", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCallback(callbackquery.All, incomingUpdate))
 
 	err := c.updater.StartPolling(c.bot, &ext.PollingOpts{DropPendingUpdates: true})
 	if err != nil {

@@ -2,6 +2,9 @@ package callbacks
 
 import (
 	"errors"
+	"strconv"
+
+	"github.com/dzendos/dubna/internal/model/state"
 )
 
 const (
@@ -25,7 +28,6 @@ func New(tgClient CallbackHandler) *Model {
 
 type CallbackData struct {
 	FromID     int64
-	MessageID  int
 	Data       string
 	CallbackID string
 }
@@ -33,8 +35,31 @@ type CallbackData struct {
 func (s *Model) IncomingCallback(data *CallbackData) error {
 	switch data.Data {
 	case EditTransaction:
-		s.toEditTransactionState(data)
+		return s.toEditTransactionState(data)
+	default:
+		wasCallback, err := s.checkUserCallback(data)
+
+		if wasCallback {
+			return err
+		}
 	}
 
 	return errors.New("Callback handler for data '" + data.Data + "' was not found.")
+}
+
+func (s *Model) checkUserCallback(data *CallbackData) (bool, error) {
+	id, err := strconv.ParseInt(data.Data, 10, 64)
+	if err != nil {
+		return false, err
+	}
+
+	st, ok := state.GetUserState(id)
+
+	if !ok {
+		return false, nil
+	}
+	// TODO check if there is no race condition
+	state.UserState[data.FromID] = state.NewUserState(st.CurrentRestaurant, st.CurrentOrder, st.OrderOrganizerID)
+
+	return true, nil
 }

@@ -5,12 +5,11 @@ import (
 )
 
 const (
-	SendReferenceMessage = "Привет, создаем новый заказ. Выберите ремторан для создания заказа."
+	SendReferenceMessage = "Привет, создаем новый заказ. Выберите ресторан для создания заказа."
 )
 
 func (s *Model) toEditState(userID int64) error {
-	currentTransactionMessage := db.GetUserTransaction(userID)
-	return s.tgClient.SetTransactionMessage(currentTransactionMessage, userID)
+	return s.tgClient.SetTransactionMessage("Введите новое сообщение", userID)
 }
 
 func (s *Model) transactionEntered(msg *Message) error {
