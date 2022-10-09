@@ -56,13 +56,27 @@ func validate(token string) func(writer http.ResponseWriter, request *http.Reque
 	}
 }
 
+type restaurantQuery struct {
+	Name string `json:"Name""`
+	Url  string `json:"Url"`
+}
+
+type restaurantsQuery struct {
+	Restaurants []restaurantQuery `json:"Restaurants"`
+}
+
 // Query getRestaurant -> (name, description, photo, methods of connections)
 func getRestaurant(writer http.ResponseWriter, request *http.Request) {
-	restaurants := []string{"Dodo", "MakDak", "KFC", "Мишлен"}
+	restaurants := restaurantsQuery{}
 
-	reqBody, err := json.Marshal(map[string][]string{
-		"Restaurants": restaurants,
-	})
+	for _, restaurant := range state.ServerState.Restaurants {
+		restaurants.Restaurants = append(restaurants.Restaurants, restaurantQuery{
+			Name: restaurant.Name,
+			Url:  restaurant.ImageUrl,
+		})
+	}
+
+	reqBody, err := json.Marshal(restaurants)
 
 	if err != nil {
 		log.Println(err, "queries.getRestaurant")
@@ -71,7 +85,6 @@ func getRestaurant(writer http.ResponseWriter, request *http.Request) {
 	log.Println(reqBody)
 	writer.Write(reqBody)
 }
-
 
 type getMenuQuery struct {
 	UserID     int64  `json:"UserID"`
