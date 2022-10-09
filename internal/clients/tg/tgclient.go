@@ -7,6 +7,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/inlinequery"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
 	"github.com/pkg/errors"
@@ -50,6 +51,7 @@ func New(tokenGetter tokenGetter) (*Client, error) {
 			MaxRoutines: ext.DefaultMaxRoutines,
 		},
 	})
+
 	dispatcher := updater.Dispatcher
 
 	tgClient = &Client{
@@ -62,6 +64,7 @@ func New(tokenGetter tokenGetter) (*Client, error) {
 }
 
 func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
+	log.Println("a")
 	if ctx.CallbackQuery != nil {
 		tgClient.callbackModel.IncomingCallback(&callbacks.CallbackData{
 			FromID:     ctx.CallbackQuery.From.Id,
@@ -115,7 +118,6 @@ func (c *Client) SetTransactionMessage(text string, userID int64) error {
 }
 
 func (c *Client) SendRestaurantMenu(userID int64) error {
-	log.Println("asdad")
 	_, err := c.bot.SendMessage(userID, "Меню готово! Перешлите сообщение для того чтобы поделиться заказом с друзьями", &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
 		ReplyMarkup: getMenuKeyboard(userID),
@@ -124,6 +126,24 @@ func (c *Client) SendRestaurantMenu(userID int64) error {
 	if err != nil {
 		return errors.Wrap(err, "client.Send")
 	}
+	return nil
+}
+
+func answerInlineQuery(bot *tgbotapi.Bot, ctx *ext.Context) error {
+	markup := getMenuKeyboard(ctx.InlineQuery.From.Id)
+	// TODO add check - whether we have order or not
+	ShareMyOrder := tgbotapi.InlineQueryResultArticle{
+		Id:                  "ShareMyOrder",
+		Title:               "Поделиться моим заказом",
+		Description:         "Отправить ссылку для доступа к моему заказу",
+		ReplyMarkup:         &markup,
+		InputMessageContent: tgbotapi.InputTextMessageContent{MessageText: ""},
+	}
+
+	bot.AnswerInlineQuery(ctx.InlineQuery.Id, []tgbotapi.InlineQueryResult{
+		ShareMyOrder,
+	}, &tgbotapi.AnswerInlineQueryOpts{CacheTime: 60})
+
 	return nil
 }
 
@@ -137,6 +157,9 @@ func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callback
 	c.dispatcher.AddHandler(handlers.NewCommand("set_transaction_message", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("cancel_order", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCallback(callbackquery.All, incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewInlineQuery(inlinequery.All, answerInlineQuery))
+
+	//c.dispatcher.AddHandler(handlers.NewChosenInlineResult(choseninlineresult.All, incomingUpdate))
 
 	err := c.updater.StartPolling(c.bot, &ext.PollingOpts{DropPendingUpdates: true})
 	if err != nil {
