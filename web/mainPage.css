@@ -296,10 +296,10 @@ p {
 }
 
 .restaurant {
-    width: 80%;
+    width: 60%;
     margin: 20px auto;
     text-align: center;
-    background-color: #434E69;
+    background-color: var(--tg-theme-secondary-bg-color, #434E69);
     border-radius: 21px;
 }
 
@@ -313,7 +313,7 @@ p {
 
 .restaurant__title {
     font-family: 'Oswald';
-    color: #E0CFB1;
+    color: var(--tg-theme-text-color,#E0CFB1);
     font-size: 25px;
 }
 
@@ -321,7 +321,7 @@ p {
     margin-top: 10px;
     margin-bottom: 15px;
     border: none;
-    background-color: #E0CFB1;
+    background-color: var(--tg-theme-button-color,#E0CFB1);
     border-radius: 20px;
     padding: 5px 10px;
     outline: none;
@@ -329,7 +329,7 @@ p {
 
 .restaurant__button a {
     font-family: "Oswald";
-    color: #1F304E;
+    color: var(--tg-theme-button-text-color,#1F304E);
     font-size: 20px;
     padding: 5px 10px;
     text-decoration: none;
