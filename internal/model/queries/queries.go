@@ -24,7 +24,8 @@ func New(tgClient QueriesHandler, token string) *Model {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("./web/")))
 	mux.HandleFunc("/validate", validate(token))
-	mux.HandleFunc("/getRestaurant", getRestaurant)
+	mux.HandleFunc("/getRestaurants", getRestaurant)
+	mux.HandleFunc("/sendRestaurant", sendRestaurant)
 	mux.HandleFunc("/getMenu", getMenu)
 	mux.HandleFunc("/sendOrder", orderIsReady)
 	mux.HandleFunc("/getOrder", getOrder)
@@ -91,8 +92,7 @@ type getMenuQuery struct {
 	Restaurant string `json:"Restaurant"`
 }
 
-// Query getMenu (userID, restaurant) -> (array of dishes(name, description, photo, maybe category))
-func getMenu(writer http.ResponseWriter, request *http.Request) {
+func sendRestaurant(writer http.ResponseWriter, request *http.Request) {
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		log.Println(err)
@@ -101,10 +101,26 @@ func getMenu(writer http.ResponseWriter, request *http.Request) {
 	userID, restaurantName := encodeGetMenuQuery(body)
 
 	state.SetUserRestaurant(userID, restaurantName)
-	restaurant, _ := state.GetRestaurantByName(restaurantName)
+}
 
-	var answer = map[string][]*position.Position{
-		"menu": restaurant.Menu.Positions,
+type returnMenuQuery struct {
+	RestaurantName string               `json:"Restaurant"`
+	Menu           []*position.Position `json:"Menu"`
+}
+
+// Query getMenu (userID, restaurant) -> (array of dishes(name, description, photo, maybe category))
+func getMenu(writer http.ResponseWriter, request *http.Request) {
+	body, err := io.ReadAll(request.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	userID := encodeUserID(body)
+	restaurant := state.GetUserRestaurant(userID)
+
+	var answer = returnMenuQuery{
+		RestaurantName: restaurant.Name,
+		Menu:           restaurant.Menu.Positions,
 	}
 
 	reqBody, err := json.Marshal(answer)
