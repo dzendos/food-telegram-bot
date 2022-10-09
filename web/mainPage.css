@@ -37,8 +37,10 @@ body {
 .item {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
     width: 100%;
-    height: 285px;
+    height: 300px;
     background-color: var(--tg-theme-secondary-bg-color,#434E69);
     /* border: 2px solid var(--tg-theme-button-color,#E0CFB1); */
     border-radius: 21px;
@@ -58,6 +60,20 @@ body {
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
+    max-height: 65px;
+    line-height: 1.1;
+    text-align: center;   
+    overflow: hidden;
+    color: var(--tg-theme-button-color,#E0CFB1);
+    margin-bottom: 5px;
+}
+
+.item__name__count {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.1;
     text-align: center;   
     color: var(--tg-theme-button-color,#E0CFB1);
     margin-bottom: 5px;
@@ -66,7 +82,7 @@ body {
 .item__button {
     font-family: 'Oswald';
     width: 60%;
-    margin: 5px auto;
+    margin: 5px auto 10px auto;
     height: 35px;
     border: 2px solid var(--tg-theme-button-color,#E0CFB1);
     background-color: var(--tg-theme-button-color,#E0CFB1);
@@ -93,7 +109,7 @@ body {
 }
 
 .item__count {
-    margin: 0px 10px 0px 10px;
+    margin: 0px 10px 5px 10px;
     font-size: 20px;
     color: var(--tg-theme-button-color,#E0CFB1);
 }
@@ -106,6 +122,7 @@ body {
     height: 35px;
     width: 40px;
     margin-top: 5px;
+    margin-bottom: 10px;
     padding: 0 10px;
     font-size: 15px;
     font-weight: 600;
@@ -202,7 +219,7 @@ body {
 }
 
 .list__element {
-    width: 340px;
+    width: 440px;
     height: 90px;
     margin: 0 auto;
     margin-bottom: 15px;
@@ -221,6 +238,8 @@ body {
     font-size: 20px;
     margin-left: 15px;
     margin-top: 15px;
+    max-height: 30px;
+    overflow: hidden;
     font-family: 'Oswald';
 }
 
@@ -236,11 +255,13 @@ body {
     outline: none;
     border: 2px solid var(--tg-theme-bg-color,#1F304E);
     border-radius: 100%;
-    background-color: #1F304E;
-    font-family: 'Oswald';
+    background-color: var(--tg-theme-bg-color,#1F304E);
     margin-right: 10px;
     margin-left: 10px;
     color: var(--tg-theme-button-color,#E0CFB1);
+    font-weight: 600;
+    font-size: 20px;
+    /* color: var(--tg-theme-button-color,#E0CFB1); */
     cursor: pointer;
     transition: .3s;
 }
@@ -257,6 +278,8 @@ p {
 
 .list__count {
     font-family: 'Oswald';
+    text-align: center;
+    width: 15px;
     color: var(--tg-theme-bg-color,#1F304E);
 }
 
@@ -268,6 +291,49 @@ p {
     margin: 3px;
 }
 
+.restaurants {
+    margin: 20px auto;
+}
+
+.restaurant {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #434E69;
+    border-radius: 21px;
+}
+
+.restaurant__image {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    margin-top: 10px;
+    border-radius: 20px;
+}
+
+.restaurant__title {
+    font-family: 'Oswald';
+    color: #E0CFB1;
+    font-size: 25px;
+}
+
+.restaurant__button {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: none;
+    background-color: #E0CFB1;
+    border-radius: 20px;
+    padding: 5px 10px;
+    outline: none;
+}
+
+.restaurant__button a {
+    font-family: "Oswald";
+    color: #1F304E;
+    font-size: 20px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
 
 @font-face {
     font-family: 'Oswald';
