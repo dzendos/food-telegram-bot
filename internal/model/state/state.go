@@ -40,6 +40,10 @@ func SetUserRestaurant(userID int64, restaurantName string) error {
 	return nil
 }
 
+func GetUserRestaurant(userID int64) *restaurant.Restaurant {
+	return userState[userID].CurrentRestaurant
+}
+
 func SetUserOrder(order *Order) {
 	state, ok := userState[order.UserID]
 
