@@ -2,21 +2,23 @@ package scrapper
 
 import (
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/dzendos/dubna/internal/model/menu"
+	"github.com/dzendos/dubna/internal/model/position"
 	"github.com/dzendos/dubna/internal/model/restaurant"
 	"github.com/dzendos/dubna/internal/model/state"
 	"github.com/dzendos/dubna/scripts"
 )
 
 func InitializeServerState() {
-	state.ServerState.Restaurants = append(state.ServerState.Restaurants, parseDodo())
+	state.ServerState.Restaurants = append(state.ServerState.Restaurants, parseDubna())
 
 }
 
-func parseDodo() *restaurant.Restaurant {
-	log.Println("Start Dubna")
+func parseDubna() *restaurant.Restaurant {
 	restaurant := restaurant.Restaurant{
 		Name:      "Dubna china",
 		Reference: "https://dubna-china.ru/",
@@ -31,25 +33,33 @@ func parseDodo() *restaurant.Restaurant {
 		log.Println(err)
 	}
 
+	curMenu := restaurant.Menu
+	curMenu = &menu.Menu{}
+
 	doc.Find(".sc-bczRLJ.hJYFVB").Each(func(i int, s *goquery.Selection) {
-		// type
-		s.Find(".sc-bczRLJ.dqChRk").Each(func(i int, s *goquery.Selection) {
-			log.Println(s.Text())
-		})
+		if s.ChildrenFiltered(".sc-bczRLJ.dqChRk").Text() != "" {
+			// type
+			itemType := s.ChildrenFiltered(".sc-bczRLJ.dqChRk").Text()
 
-		// Roll
-		s.Find(".sc-bczRLJ.sc-gsnTZi.Card-sc-2npckq-2.cisoKP.jnFvAE.jbjTQa").Each(func(i int, s *goquery.Selection) {
-			// roll name
-			s.Find(".sc-bczRLJ.gxeRtG").Each(func(i int, s *goquery.Selection) {
-				log.Println(s.Text())
+			// Roll
+			s.Find(".sc-bczRLJ.sc-gsnTZi.Card-sc-2npckq-2.cisoKP.jnFvAE.jbjTQa").Each(func(i int, s *goquery.Selection) {
+				imageUrl, _ := s.Find(".sc-bczRLJ.jBqnLQ.Image-sc-2npckq-4.kPlshG").Attr("src") // item picture
+				itemName := s.Find(".sc-bczRLJ.gxeRtG").Text()
+				itemCostStr := s.Find(".sc-bczRLJ.hWxACP").Text()
+
+				itemCost, _ := strconv.ParseFloat(strings.TrimSuffix(itemCostStr, " ₽"), 64)
+
+				curMenu.Positions = append(curMenu.Positions, &position.Position{
+					Name:     itemName,
+					ImageUrl: imageUrl,
+					Price:    itemCost,
+					Type:     itemType,
+				})
+
+				//log.Println(imageUrl, itemName, itemCost)
 			})
-		})
-
-		log.Println(i+1, s.Text())
-		s.Find("")
+		}
 	})
-
-	log.Println("End dodo")
 
 	return &restaurant
 }
