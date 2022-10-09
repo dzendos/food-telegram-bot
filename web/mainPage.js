@@ -1,5 +1,5 @@
 
-url = "https://7936-188-130-155-154.eu.ngrok.io";
+url = "https://8f82-188-130-155-154.eu.ngrok.io";
 
 // let btnAdd = document.getElementById("button__add");
 // let btnPlus = document.getElementById("button__plus");
@@ -8,7 +8,7 @@ url = "https://7936-188-130-155-154.eu.ngrok.io";
 // let elem = document.getElementById("hidden");
 
 let confirm_btn_text = document.getElementById("button__confirm__text");
-
+let confirm_btn = document.getElementById("button__confirm")
 is_validate = false;
 
 let dishes = [];
@@ -78,13 +78,13 @@ function confirm_btn_listener(){
             order.push(cur_dish);
         }
     }
-    request.UserID = parse_init_data.user.id
+    console.log(parsed_init_data)
+    request.UserID = parsed_init_data.user.id
     request.Order = order;
     request = JSON.stringify(request)
-
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader('sendOrder', 'application/json');
+    xhr.open("POST", url + "/sendOrder", false);
+    xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(request);
 }
 
@@ -109,7 +109,7 @@ function add_dish(data){
         const cont = document.querySelector("#dish_container")
         const clone = template.content.cloneNode(true);
         let img = clone.querySelectorAll("img");
-        img[0].src = "https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY=";
+        img[0].src = data.url;
         let dish_name_p = clone.getElementById("dish_name");
         let dish_name_price = clone.getElementById("dish_price");
 
@@ -143,8 +143,8 @@ function add_dish(data){
     }
 }
 
-function set_menu(restaurant){
-    fetch(url + "/getMenu?restaurant="+restaurant).then(response=>{
+function set_menu(id){
+    fetch(url + "/getMenu?id=" + id).then(response=>{
         response.json().then(data=>{
             data = data.menu;
             for (let i = 0; i < data.length; i++){
@@ -179,7 +179,8 @@ function get_user_restaurant(){
         alert("Error during geting user restaurant")
     })
 }
-
+console.log("started")
+confirm_btn.addEventListener('click', confirm_btn_listener)
 Telegram.WebApp.ready();
 let initData = Telegram.WebApp.initData || '';
 let initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
@@ -190,9 +191,10 @@ fetch(url + "/validate?" + Telegram.WebApp.initData).then(function (response) {
     is_validate = true;
     parsed_init_data = parse_init_data(initData);
     // get_user_restaurant()
-    set_menu();
+    set_menu(351902890);
 }).catch(function () {
     alert("Error on validation occured");
 });
+
 
 // get_restaurants()

@@ -1,9 +1,11 @@
-let itemBtnMinus = document.getElementById('item__minus');
-let itemBtnPlus = document.getElementById('item__plus');
-let itemCount = document.getElementById('item__count');
-let intItemCount = 1;
-let element1 = document.getElementById('element1');
-itemCount.innerHTML = intItemCount;
+let url = "https://8f82-188-130-155-154.eu.ngrok.io";
+
+// let itemBtnMinus = document.getElementById('item__minus');
+// let itemBtnPlus = document.getElementById('item__plus');
+// let itemCount = document.getElementById('item__count');
+// let intItemCount = 1;
+// let element1 = document.getElementById('element1');
+// itemCount.innerHTML = intItemCount;
 
 
 Telegram.WebApp.ready();
