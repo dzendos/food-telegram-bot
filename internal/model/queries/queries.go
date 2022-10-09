@@ -58,7 +58,7 @@ func validate(token string) func(writer http.ResponseWriter, request *http.Reque
 }
 
 type restaurantQuery struct {
-	Name string `json:"Name""`
+	Name string `json:"Name"`
 	Url  string `json:"Url"`
 }
 
