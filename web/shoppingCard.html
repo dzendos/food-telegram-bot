@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./mainPage.css">
+    <title>Корзина</title>
+</head>
+<body>
+    <div class="title__block">
+        <h1 class="title">Корзина</h1>
+    </div>
+    <div class="back">
+        <a id = "back__button" class="back__link" href="./mainPage.html">Назад к меню</a>
+    </div>
+    <div id = "list__dishes" class="list">
+        
+    </div>
+    <div class="footer">
+        <button id = "confirm__button" class="footer__link"><a >Подтвердить</a></button>
+    </div>
+</body>
+</html>
+
+
+<template id = "dish__element__template">
+    <div id="element" class="list__element">
+        <div class="list__item">
+            <div id = "dish_name" class="list__text"></div>
+            <div class="list__change">
+                <button id="item__minus" class="list__button" type="button">-</button>
+                <p id="item__count" class="list__count">1</p>
+                <button id="item__plus" class="list__button" type="button">+</button>
+            </div>
+        </div>
+        <div class="list__under">
+            <p id = "dish__sum">576 x 20 = 5321 руб.</p>
+        </div>
+    </div>    
+</template>
+
+<script src="./shoppingCard.js"></script>

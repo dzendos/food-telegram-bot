@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./mainPage.css">
+    <title>Рестораны</title>
+</head>
+<body>
+    <div class="title__block">
+        <h1 class="title">Рестораны</h1>
+    </div>
+    <div id="restaurants">
+    </div>
+    
+    <template id="restaurant">
+        <div class="restaurant">
+            <div>
+                <img id="image" class="restaurant__image" src="" alt="please, wait">
+            </div>
+            <p id="title" class="restaurant__title">Dodo pizza</p>
+            <div>
+                <button id="button__restaurant" class="restaurant__button" type="button">
+                    <a href="#">Перейти к ресторану</a>
+                </button>
+            </div>
+        </div>
+    </template>
+</body>
+</html>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="./restaurantPage.js"></script>
