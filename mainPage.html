@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./mainPage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+</head>
+<body>
+    <div class="title__block">
+        <h1 id="restaurant__title" class="title">Restaurant Name</h1>
+    </div>
+    <div id="dish_container" class="items">
+        
+    </div>
+    <div class="footer">
+        <button id = "button__confirm" class="footer__link"><a id="button__confirm__text">Отменить</a></button>
+    </div>
+</body>
+</html>
+
+<template id="dish_template">
+    <div class="item">
+        <div>
+            <img class="item__image" alt="please, wait">
+        </div>
+        <div>
+            <p id = "dish_name" class="item__name"> </p>
+            <p id = "dish_price" class="item__name__count">100 </p>
+            <button id="add" class="item__button" type="button">Добавить</button>
+            <div id="hidden" class="item__hidden">
+                <button id="button__minus" class="item__button__hide" type="button">-</button>
+                <p id="count" class="item__count">0</p>
+                <button id="button__plus" class="item__button__hide" type="button">+</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script src="./mainPage.js"></script>
