@@ -3,6 +3,8 @@
 package tg
 
 import (
+	"fmt"
+
 	tgbotapi "github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/state"
@@ -14,10 +16,16 @@ var chooseRestaurantKeyboard = tgbotapi.InlineKeyboardMarkup{
 	}},
 }
 
-func getMenuKeyboard(userID int64) tgbotapi.InlineKeyboardMarkup {
+var getMenuKeyboard = tgbotapi.InlineKeyboardMarkup{
+	InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
+		{Text: "Составить заказ", WebApp: &tgbotapi.WebAppInfo{Url: state.MenuReference}},
+	}},
+}
+
+func getShareOrderKeyboard(userID int64) tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
-			{Text: "Составить заказ", WebApp: &tgbotapi.WebAppInfo{Url: state.RestaurantReference}, CallbackData: string(userID)},
+			{Text: "Присоединиться к заказу", CallbackData: fmt.Sprint(userID)},
 		}},
 	}
 }

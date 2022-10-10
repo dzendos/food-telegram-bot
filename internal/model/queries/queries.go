@@ -15,6 +15,7 @@ import (
 
 type QueriesHandler interface {
 	SendRestaurantMenu(userID int64) error
+	SendMessage(text string, userID int64) error
 }
 
 type Model struct {
@@ -123,11 +124,14 @@ func (s *Model) getMenu(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	userID := encodeUserID(body)
-	restaurant := state.GetUserRestaurant(userID)
+	id := state.GetOrderOwner(userID)
+	restaurant := state.GetUserRestaurant(id)
+
+	log.Println(string(body), userID, restaurant)
 
 	if restaurant == nil {
 		time.Sleep(3 * time.Millisecond)
-		restaurant = state.GetUserRestaurant(userID)
+		restaurant = state.GetUserRestaurant(id)
 	}
 
 	var answer = returnMenuQuery{
@@ -170,6 +174,10 @@ func (s *Model) orderIsReady(writer http.ResponseWriter, request *http.Request) 
 	order := encodeOrderIsReady(body)
 
 	state.SetUserOrder(order)
+
+	text := state.OrderToString(order.UserID)
+
+	s.tgClient.SendMessage(text, order.UserID)
 }
 
 func encodeOrderIsReady(body []byte) *state.Order {

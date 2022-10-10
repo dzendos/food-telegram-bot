@@ -1,4 +1,4 @@
-let url = "https://c7d5-188-130-155-154.eu.ngrok.io";
+let url = "https://c259-188-130-155-154.eu.ngrok.io";
 
 Telegram.WebApp.ready();
 let initData = Telegram.WebApp.initData || '';

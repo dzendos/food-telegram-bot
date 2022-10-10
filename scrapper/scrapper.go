@@ -61,6 +61,10 @@ func parseDubna() *restaurant.Restaurant {
 		}
 	})
 
+	restaurant.Menu = curMenu
+
+	log.Println(curMenu)
+
 	return &restaurant
 }
 
@@ -87,9 +91,9 @@ func parseMrLim() *restaurant.Restaurant {
 		// log.Println("aboba")
 		s.Find(`section[class="py-8 mb-8"]`).Each(func(i int, s *goquery.Selection) {
 			s.Find(`.grid`).Each(func(i int, s *goquery.Selection) {
-				log.Println("section")
+				//og.Println("section")
 				s.Find(`.card`).Each(func(i int, s *goquery.Selection) {
-					log.Println("card")
+					//log.Println("card")
 					src, is_here := s.Find(`img`).Attr("src")
 					if is_here {
 						if src == "/_nuxt/5e5e01b09a7e549d74e0acec108c84c6.svg" {
@@ -102,18 +106,20 @@ func parseMrLim() *restaurant.Restaurant {
 					name = strings.TrimSpace(name)
 					price, _ := strconv.ParseFloat(strings.Trim(s.Find(`.text-lg.font-semibold.text-gray-700.dark:text-white`).Text(), " ₽"), 64)
 					curMenu.Positions = append(curMenu.Positions, &position.Position{
-						Name:     "aboba",
+						Name:     name,
 						ImageUrl: src,
-						Price:    12,
+						Price:    price,
 						Type:     "Прочее",
 					})
-					log.Println(name, price, src)
+					//log.Println(name, price, src)
 				})
 			})
 		})
 	})
 	// <div class="grid grid-cols-4 gap-8">
 	log.Println("End dodo")
+
+	restaurant.Menu = curMenu
 
 	return &restaurant
 }

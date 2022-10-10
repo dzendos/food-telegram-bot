@@ -1,11 +1,7 @@
 
-url = "https://c7d5-188-130-155-154.eu.ngrok.io";
+url = "https://c259-188-130-155-154.eu.ngrok.io";
 
-// let btnAdd = document.getElementById("button__add");
-// let btnPlus = document.getElementById("button__plus");
-// let btnMinus = document.getElementById("button__minus");
-// let countElem = document.getElementById("count");
-// let elem = document.getElementById("hidden");
+
 
 let confirm_btn_text = document.getElementById("button__confirm__text");
 let confirm_btn = document.getElementById("button__confirm");
@@ -88,8 +84,7 @@ function confirm_btn_listener(){
     xhr.open("POST", url + "/sendOrder", false);
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(request);
-    Telegram.WebApp.openLink(url + "/shoppingCard.html")
-    // window.open(url + "/shoppingCard.html","_self")
+    Telegram.WebApp.close()
 
 }
 

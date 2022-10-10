@@ -1,13 +1,5 @@
 
-data = {
-    number: 4,
-    titles: ["Fuck you", "fuck you and you", "fuck this shit", "fuck fuck fuck"],
-    images: ["https://pbs.twimg.com/profile_images/832146364423364609/QolnTZgP_400x400.jpg",
-        "https://media-cdn.tripadvisor.com/media/photo-s/1b/99/44/8e/kfc-faxafeni.jpg",
-        "https://pbs.twimg.com/profile_images/832146364423364609/QolnTZgP_400x400.jpg",
-        "https://media-cdn.tripadvisor.com/media/photo-s/1b/99/44/8e/kfc-faxafeni.jpg"]
-}
-let url = "https://c7d5-188-130-155-154.eu.ngrok.io";
+let url = "https://c259-188-130-155-154.eu.ngrok.io";
 Telegram.WebApp.ready();
 let initData = Telegram.WebApp.initData || '';
 let initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};

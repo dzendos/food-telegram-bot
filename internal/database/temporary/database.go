@@ -1,6 +1,8 @@
 package temporary
 
-var DefaultTransactionMessage string = "Привет! Заказ успешно оформлен, здесь ты можешь ознакомиться с составом заказа:"
+import "log"
+
+var DefaultTransactionMessage string = "Привет! Заказ успешно оформлен, напишите мне в личное сообщение чтобы перевести за него"
 
 var UserSettings = make(map[int64]UserSettingsType)
 
@@ -20,11 +22,12 @@ func GetUserTransaction(userID int64) string {
 	if !ok {
 		settings = *NewUserSettings()
 	}
-
-	return settings.TransactionMessage
+	UserSettings[userID] = settings
+	return UserSettings[userID].TransactionMessage
 }
 
 func SetUserTransaction(text string, userID int64) error {
+	log.Println(text)
 	settings, ok := UserSettings[userID]
 
 	if !ok {

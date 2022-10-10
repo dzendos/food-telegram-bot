@@ -2,6 +2,8 @@
 package state
 
 import (
+	"fmt"
+
 	"github.com/dzendos/dubna/internal/model/restaurant"
 	"github.com/pkg/errors"
 )
@@ -11,8 +13,8 @@ var UserState = make(map[int64]UserStateType)
 type State int
 
 const (
-	RestaurantReference = "https://c7d5-188-130-155-154.eu.ngrok.io/restaurantPage.html"
-	MenuReference       = "https://c7d5-188-130-155-154.eu.ngrok.io/mainPage.html"
+	RestaurantReference = "https://c259-188-130-155-154.eu.ngrok.io/restaurantPage.html"
+	MenuReference       = "https://c259-188-130-155-154.eu.ngrok.io/mainPage.html"
 )
 
 const (
@@ -23,6 +25,7 @@ type UserStateType struct {
 	CurrentRestaurant *restaurant.Restaurant
 	CurrentOrder      []OrderPosition
 	EditState         State
+	EditMessageID     int64
 	OrderOrganizerID  int64
 }
 
@@ -47,6 +50,111 @@ type Order struct {
 func GetUserState(userID int64) (UserStateType, bool) {
 	state, ok := UserState[userID]
 	return state, ok
+}
+
+func SetOrderOrganizer(userID int64, organizerID int64) error {
+	state, ok := UserState[userID]
+
+	if !ok {
+		state = UserStateType{}
+	}
+
+	state.OrderOrganizerID = organizerID
+
+	UserState[userID] = state
+
+	return nil
+}
+
+func OrderToString(userID int64) string {
+	var result string = "Ваш заказ готов:\n\n"
+
+	state := UserState[userID]
+
+	for _, pos := range state.CurrentOrder {
+		result += "'" + pos.Name + "' " + fmt.Sprint(pos.Amount) + " шт\n"
+	}
+
+	return result
+}
+
+func SetMessageID(userID, messageID int64) int64 {
+	state, ok := UserState[userID]
+	if !ok {
+		state = UserStateType{}
+	}
+	state.EditMessageID = messageID
+	UserState[userID] = state
+
+	return UserState[userID].EditMessageID
+}
+
+func GetFullOrder(userID int64) string {
+	var result string = ""
+
+	for id, state := range UserState {
+		if state.OrderOrganizerID != userID {
+			continue
+		}
+
+		result += fmt.Sprint(id) + ":\n"
+		for _, pos := range state.CurrentOrder {
+			result += "'" + pos.Name + "' " + fmt.Sprint(pos.Amount) + " шт\n"
+		}
+		result += "\n"
+	}
+
+	return result
+}
+
+func ResetUsers(userID int64) {
+	for id, state := range UserState {
+		if state.OrderOrganizerID != userID {
+			continue
+		}
+
+		delete(UserState, id)
+	}
+}
+
+func GetDebts(userID int64) (result map[int64]float64) {
+	result = make(map[int64]float64)
+
+	for id, state := range UserState {
+		if state.OrderOrganizerID != userID {
+			continue
+		}
+		var res float64 = 0
+		for _, position := range state.CurrentOrder {
+			res += float64(position.Amount) * positionCost(position.Name, state)
+		}
+
+		result[id] = res
+	}
+
+	return
+}
+
+func positionCost(name string, state UserStateType) float64 {
+	for _, pos := range state.CurrentRestaurant.Menu.Positions {
+		if pos.Name == name {
+			return pos.Price
+		}
+	}
+
+	return 0
+}
+
+func GetOrderOwner(userID int64) int64 {
+	state, ok := UserState[userID]
+	if !ok {
+		state = UserStateType{
+			OrderOrganizerID: userID,
+		}
+	}
+	UserState[userID] = state
+
+	return UserState[userID].OrderOrganizerID
 }
 
 func SetUserRestaurant(userID int64, restaurantName string) error {

@@ -33,6 +33,48 @@ func (m *MockMessageSender) EXPECT() *MockMessageSenderMockRecorder {
 	return m.recorder
 }
 
+// DeleteMessage mocks base method.
+func (m *MockMessageSender) DeleteMessage(userID, messageID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMessage", userID, messageID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMessage indicates an expected call of DeleteMessage.
+func (mr *MockMessageSenderMockRecorder) DeleteMessage(userID, messageID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMessage", reflect.TypeOf((*MockMessageSender)(nil).DeleteMessage), userID, messageID)
+}
+
+// EditMessage mocks base method.
+func (m *MockMessageSender) EditMessage(text string, userID, messageID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditMessage", text, userID, messageID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// EditMessage indicates an expected call of EditMessage.
+func (mr *MockMessageSenderMockRecorder) EditMessage(text, userID, messageID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditMessage", reflect.TypeOf((*MockMessageSender)(nil).EditMessage), text, userID, messageID)
+}
+
+// SendMessage mocks base method.
+func (m *MockMessageSender) SendMessage(text string, userID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendMessage", text, userID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendMessage indicates an expected call of SendMessage.
+func (mr *MockMessageSenderMockRecorder) SendMessage(text, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMessage", reflect.TypeOf((*MockMessageSender)(nil).SendMessage), text, userID)
+}
+
 // SendReference mocks base method.
 func (m *MockMessageSender) SendReference(text string, userID int64) error {
 	m.ctrl.T.Helper()
