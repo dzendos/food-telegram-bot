@@ -225,14 +225,9 @@ func parseMrLim() *restaurant.Restaurant {
 	curMenu := restaurant.Menu
 	curMenu = &menu.Menu{}
 	doc.Find(`div[data-fetch-key="1"]`).Each(func(i int, s *goquery.Selection) {
-		// type
-		// s.Find("")
-		// log.Println("aboba")
 		s.Find(`section[class="py-8 mb-8"]`).Each(func(i int, s *goquery.Selection) {
 			s.Find(`.grid`).Each(func(i int, s *goquery.Selection) {
-				//og.Println("section")
 				s.Find(`.card`).Each(func(i int, s *goquery.Selection) {
-					//log.Println("card")
 					src, is_here := s.Find(`img`).Attr("src")
 					if is_here {
 						if src == "/_nuxt/5e5e01b09a7e549d74e0acec108c84c6.svg" {
@@ -241,22 +236,24 @@ func parseMrLim() *restaurant.Restaurant {
 					} else {
 						src = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fburger_198416&psig=AOvVaw2E6MWWwYc15-oqZGTbB4DN&ust=1665433673828000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICXl4b-0_oCFQAAAAAdAAAAABAO"
 					}
-					name := s.Find(`.font-semibold.text-gray-700.dark:text-white.text-lgg"`).Text()
+
+					name := s.Find(`div.mb-4`).Find(`span.font-semibold`).Text()
 					name = strings.TrimSpace(name)
-					price, _ := strconv.ParseFloat(strings.Trim(s.Find(`.text-lg.font-semibold.text-gray-700.dark:text-white`).Text(), " ₽"), 64)
+					priceRaw := s.Find(`div.mt-auto`).Find(`span.text-lg`).Text()
+					price, _ := strconv.ParseFloat(strings.Trim(strings.TrimSpace(priceRaw), " ₽"), 64)
 					curMenu.Positions = append(curMenu.Positions, &position.Position{
 						Name:     name,
 						ImageUrl: src,
 						Price:    price,
 						Type:     "Прочее",
 					})
-					//log.Println(name, price, src)
+					// log.Println("name: ", name, " price: ", price)
 				})
 			})
 		})
 	})
 	// <div class="grid grid-cols-4 gap-8">
-	//log.Println("End dodo")
+	// log.Println("End dodo")
 
 	restaurant.Menu = curMenu
 
