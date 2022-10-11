@@ -200,6 +200,11 @@ func answerInlineQuery(bot *tgbotapi.Bot, ctx *ext.Context) error {
 	return nil
 }
 
+func (c *Client) GetUserByID(userID int64) string {
+	user, _ := c.bot.GetChat(userID, &tgbotapi.GetChatOpts{})
+	return user.FirstName + " " + user.LastName
+}
+
 func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callbacks.Model) {
 	c.msgModel = msgModel
 	c.callbackModel = callbackModel

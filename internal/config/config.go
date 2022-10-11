@@ -11,6 +11,8 @@ const configFile = "data/config.yaml"
 
 type config struct {
 	Token string `yaml:"token"`
+	Url   string `yaml:"url"`
+	Port  int    `yaml:"port"`
 }
 
 type Service struct {
@@ -35,4 +37,12 @@ func New() (*Service, error) {
 
 func (s *Service) Token() string {
 	return s.config.Token
+}
+
+func (s *Service) Url() string {
+	return s.config.Url
+}
+
+func (s *Service) Port() int {
+	return s.config.Port
 }
