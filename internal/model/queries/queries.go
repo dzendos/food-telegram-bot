@@ -145,7 +145,7 @@ func (s *Model) getMenu(writer http.ResponseWriter, request *http.Request) {
 		log.Println(err, "queries.getMenu")
 	}
 
-	log.Println(string(reqBody))
+	//log.Println(string(reqBody))
 	writer.Write(reqBody)
 }
 
@@ -234,7 +234,7 @@ func (s *Model) getOrder(writer http.ResponseWriter, request *http.Request) {
 		log.Println(err, "queries.getMenu")
 	}
 
-	log.Println(string(reqBody))
+	//log.Println(string(reqBody))
 	writer.Write(reqBody)
 }
 

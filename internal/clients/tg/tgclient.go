@@ -65,7 +65,6 @@ func New(tokenGetter tokenGetter) (*Client, error) {
 }
 
 func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
-	log.Println("a")
 	log.Println(ctx.EffectiveMessage)
 	if ctx.CallbackQuery != nil {
 		tgClient.callbackModel.IncomingCallback(&callbacks.CallbackData{
