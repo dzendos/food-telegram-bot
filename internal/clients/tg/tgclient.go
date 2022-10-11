@@ -11,6 +11,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/message"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
+	"github.com/dzendos/dubna/internal/model/state"
 	"github.com/pkg/errors"
 )
 
@@ -132,10 +133,10 @@ func (c *Client) SendMessage(text string, userID int64) error {
 }
 
 func (c *Client) SendReference(text string, userID int64) error {
-	log.Println("SenD=Ref")
+	log.Println(state.RestaurantReference)
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: chooseRestaurantKeyboard,
+		ReplyMarkup: chooseRestaurantKeyboard(),
 	})
 
 	if err != nil {
@@ -158,7 +159,7 @@ func (c *Client) SetTransactionMessage(text string, userID int64) error {
 func (c *Client) SendRestaurantMenu(userID int64) error {
 	_, err := c.bot.SendMessage(userID, "Меню готово! Перешлите сообщение для того чтобы поделиться заказом с друзьями", &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: getMenuKeyboard,
+		ReplyMarkup: getMenuKeyboard(),
 	})
 
 	if err != nil {
@@ -170,7 +171,7 @@ func (c *Client) SendRestaurantMenu(userID int64) error {
 func (c *Client) SendOrderMenu(text string, userID int64) error {
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: getMenuKeyboard,
+		ReplyMarkup: getMenuKeyboard(),
 	})
 
 	if err != nil {

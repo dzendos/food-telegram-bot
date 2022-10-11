@@ -10,16 +10,20 @@ import (
 	"github.com/dzendos/dubna/internal/model/state"
 )
 
-var chooseRestaurantKeyboard = tgbotapi.InlineKeyboardMarkup{
-	InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
-		{Text: "Выбрать ресторан", WebApp: &tgbotapi.WebAppInfo{Url: state.RestaurantReference}},
-	}},
+func chooseRestaurantKeyboard() tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
+			{Text: "Выбрать ресторан", WebApp: &tgbotapi.WebAppInfo{Url: state.RestaurantReference}},
+		}},
+	}
 }
 
-var getMenuKeyboard = tgbotapi.InlineKeyboardMarkup{
-	InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
-		{Text: "Составить заказ", WebApp: &tgbotapi.WebAppInfo{Url: state.MenuReference}},
-	}},
+func getMenuKeyboard() tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{{
+			{Text: "Составить заказ", WebApp: &tgbotapi.WebAppInfo{Url: state.MenuReference}},
+		}},
+	}
 }
 
 func getShareOrderKeyboard(userID int64) tgbotapi.InlineKeyboardMarkup {
