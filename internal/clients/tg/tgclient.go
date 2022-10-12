@@ -210,6 +210,7 @@ func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callback
 	c.callbackModel = callbackModel
 
 	c.dispatcher.AddHandler(handlers.NewCommand("start", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("help", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("my_order", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("full_order", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("confirm_order", incomingUpdate))

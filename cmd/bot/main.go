@@ -28,6 +28,8 @@ func main() {
 	state.RestaurantReference = config.Url() + "restaurantPage.html"
 	state.MenuReference = config.Url() + "mainPage.html"
 
+	log.Println(state.RestaurantReference)
+
 	msgModel := messages.New(tgClient)
 	callbackModel := callbacks.New(tgClient)
 	serverModel := queries.New(tgClient, config.Token())
