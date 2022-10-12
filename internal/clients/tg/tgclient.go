@@ -123,7 +123,7 @@ func (c *Client) ShowNotification(text string, userID int64, callbackID string) 
 
 func (c *Client) SendMessage(text string, userID int64) error {
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
-		ParseMode: "Markdown",
+		//ParseMode: "Markdown",
 	})
 
 	if err != nil {
