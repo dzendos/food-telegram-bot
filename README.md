@@ -1,4 +1,5 @@
 # Food-telegram-bot
+<img src = "./img/logo.jpg?raw=true" width = "30%" height = "30%" alt = "logo" align = center />
 
 Простой бот для заказа доставки с сайтов без использования сторонних приложений.
 
@@ -26,8 +27,20 @@
 ## Дизайн
 
 * Изменение дизайна в зависимости от темы приложения телеграм
+
+Light theme     | Dark theme
+:--------------:|:------------:
+<img src = "./img/light_menu.jpg?raw=true" width = "30%" height = "30%" alt = "light_menu" align = center /> | <img src = "./img/darkj_menu.jpg?raw=true" width = "30%" height = "30%" alt = "darkj_menu" align = center />
+
 * Всплывающее окно с возможностью выбора ресторанов и последующим составлением заказа
+<img src = "./img/restaurant_choose.jpg?raw=true" width = "40%" height = "40%" alt = "restaurant_choose" align = center />
+
 * Просмотр текущего состояния заказа
+
+Light theme     | Dark theme
+:--------------:|:------------:
+<img src = "./img/list_of_order.png?raw=true" width = "30%" height = "30%" alt = "list_of_order" align = center /> | <img src = "./img/list_of_order_dark.png?raw=true" width = "30%" height = "30%" alt = "list_of_order_dark" align = center />
+
 * Настраиваемое сообщение, отправляемое всем участникам заказа
 
 ## Команды
@@ -38,12 +51,15 @@
 * /set_transaction_message - установить сообщение, приходящее всем коллегам, которые участвуют в вашем заказе
 * /confirm order - подвтердить заказ
 
+<img src = "./img/list_of_commands.jpg?raw=true" width = "30%" height = "30%" alt = "commands" align = center />
 
 ## Необходимые библиотеки
 * [Go](https://go.dev/doc/install)
 * [gotgbot](https://github.com/PaulSonOfLars/gotgbot)
 * [goquery](https://github.com/PuerkitoBio/goquery)
 * [errors](https://github.com/pkg/errors)
+
+<img src = "./img/go.jpg?raw=true" width = "50%" height = "50%" alt = "go" align = center />
 
 Используйте `go mod tidy` для того чтобы установить все необходимые пакеты
 
@@ -56,8 +72,3 @@
 * url - ссылка по которой будет хоститься веб оболочка бота
 
 собирать при помощи `make run`
-
-Light theme     | Dark theme
-:--------------:|:------------:
-![](https://github.com/dzendos/food-telegram-bot/blob/development/img/light_menu.jpg?raw=true) | ![](https://github.com/dzendos/food-telegram-bot/blob/development/img/darkj_menu.jpg?raw=true)
-![]
