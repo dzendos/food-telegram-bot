@@ -191,7 +191,7 @@ func answerInlineQuery(bot *tgbotapi.Bot, ctx *ext.Context) error {
 		Title:               "Поделиться моим заказом",
 		Description:         "Отправить ссылку для доступа к моему заказу",
 		ReplyMarkup:         &markup,
-		InputMessageContent: tgbotapi.InputTextMessageContent{MessageText: "Приввет, вот ссылка для подключения к моему заказу"},
+		InputMessageContent: tgbotapi.InputTextMessageContent{MessageText: "Привет, вот ссылка для подключения к моему заказу"},
 	}
 
 	bot.AnswerInlineQuery(ctx.InlineQuery.Id, []tgbotapi.InlineQueryResult{
