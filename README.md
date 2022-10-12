@@ -33,7 +33,7 @@ Light theme     | Dark theme
 <img src = "./img/light_menu.jpg?raw=true" width = "30%" height = "30%" alt = "light_menu" align = center /> | <img src = "./img/darkj_menu.jpg?raw=true" width = "30%" height = "30%" alt = "darkj_menu" align = center />
 
 * Всплывающее окно с возможностью выбора ресторанов и последующим составлением заказа
-<img src = "./img/restaurant_choose.jpg?raw=true" width = "40%" height = "40%" alt = "restaurant_choose" align = center />
+<img src = "./img/restaurant_choose.jpg?raw=true" width = "30%" height = "30%" alt = "restaurant_choose" align = center />
 
 * Просмотр текущего состояния заказа
 
