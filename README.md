@@ -1,4 +1,6 @@
 # Food-telegram-bot
+[![Try it out!](https://img.shields.io/badge/try-online!-blueviolet)]([https://fizruk.github.io/simple-topes/](https://t.me/cloudcom_food_bot))
+
 <img src = "./img/logo.jpg?raw=true" width = "30%" height = "30%" alt = "logo" align = center />
 
 Простой бот для заказа доставки с сайтов без использования сторонних приложений.
