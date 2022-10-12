@@ -45,7 +45,7 @@
 * [goquery](https://github.com/PuerkitoBio/goquery)
 * [errors](https://github.com/pkg/errors)
 
-Используйте `go mod tidy` lля того чтобы установить все необходимые пакеты
+Используйте `go mod tidy` для того чтобы установить все необходимые пакеты
 
 ## Как запустить
 Создайте файл config.yaml в папке data на примере config_example.yaml
