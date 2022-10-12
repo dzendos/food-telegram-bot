@@ -12,9 +12,9 @@ var UserState = make(map[int64]UserStateType)
 
 type State int
 
-const (
-	RestaurantReference = "https://c259-188-130-155-154.eu.ngrok.io/restaurantPage.html"
-	MenuReference       = "https://c259-188-130-155-154.eu.ngrok.io/mainPage.html"
+var (
+	RestaurantReference string
+	MenuReference       string
 )
 
 const (
@@ -27,6 +27,7 @@ type UserStateType struct {
 	EditState         State
 	EditMessageID     int64
 	OrderOrganizerID  int64
+	Name              string
 }
 
 func NewUserState(r *restaurant.Restaurant, o []OrderPosition, id int64) UserStateType {
@@ -97,7 +98,7 @@ func GetFullOrder(userID int64) string {
 			continue
 		}
 
-		result += fmt.Sprint(id) + ":\n"
+		result += GetUserName(id) + ":\n"
 		for _, pos := range state.CurrentOrder {
 			result += "'" + pos.Name + "' " + fmt.Sprint(pos.Amount) + " шт\n"
 		}
@@ -133,6 +134,24 @@ func GetDebts(userID int64) (result map[int64]float64) {
 	}
 
 	return
+}
+
+func SetUserName(userID int64, name string) {
+	state, ok := UserState[userID]
+	if !ok {
+		state = UserStateType{}
+	}
+	state.Name = name
+	UserState[userID] = state
+}
+
+func GetUserName(userID int64) string {
+	state, ok := UserState[userID]
+	if !ok {
+		state = UserStateType{}
+	}
+
+	return state.Name
 }
 
 func positionCost(name string, state UserStateType) float64 {

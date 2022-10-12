@@ -1,4 +1,4 @@
 /bin
 /.vscode
 /.idea
-/data
+data/config.yaml

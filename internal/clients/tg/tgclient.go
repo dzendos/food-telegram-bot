@@ -11,6 +11,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/message"
 	"github.com/dzendos/dubna/internal/model/callbacks"
 	"github.com/dzendos/dubna/internal/model/messages"
+	"github.com/dzendos/dubna/internal/model/state"
 	"github.com/pkg/errors"
 )
 
@@ -65,7 +66,6 @@ func New(tokenGetter tokenGetter) (*Client, error) {
 }
 
 func incomingUpdate(bot *tgbotapi.Bot, ctx *ext.Context) error {
-	log.Println("a")
 	log.Println(ctx.EffectiveMessage)
 	if ctx.CallbackQuery != nil {
 		tgClient.callbackModel.IncomingCallback(&callbacks.CallbackData{
@@ -123,7 +123,7 @@ func (c *Client) ShowNotification(text string, userID int64, callbackID string) 
 
 func (c *Client) SendMessage(text string, userID int64) error {
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
-		ParseMode: "Markdown",
+		//ParseMode: "Markdown",
 	})
 
 	if err != nil {
@@ -133,10 +133,10 @@ func (c *Client) SendMessage(text string, userID int64) error {
 }
 
 func (c *Client) SendReference(text string, userID int64) error {
-	log.Println("SenD=Ref")
+	log.Println(state.RestaurantReference)
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: chooseRestaurantKeyboard,
+		ReplyMarkup: chooseRestaurantKeyboard(),
 	})
 
 	if err != nil {
@@ -159,7 +159,7 @@ func (c *Client) SetTransactionMessage(text string, userID int64) error {
 func (c *Client) SendRestaurantMenu(userID int64) error {
 	_, err := c.bot.SendMessage(userID, "Меню готово! Перешлите сообщение для того чтобы поделиться заказом с друзьями", &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: getMenuKeyboard,
+		ReplyMarkup: getMenuKeyboard(),
 	})
 
 	if err != nil {
@@ -171,7 +171,7 @@ func (c *Client) SendRestaurantMenu(userID int64) error {
 func (c *Client) SendOrderMenu(text string, userID int64) error {
 	_, err := c.bot.SendMessage(userID, text, &tgbotapi.SendMessageOpts{
 		ParseMode:   "HTML",
-		ReplyMarkup: getMenuKeyboard,
+		ReplyMarkup: getMenuKeyboard(),
 	})
 
 	if err != nil {
@@ -201,11 +201,17 @@ func answerInlineQuery(bot *tgbotapi.Bot, ctx *ext.Context) error {
 	return nil
 }
 
+func (c *Client) GetUserByID(userID int64) string {
+	user, _ := c.bot.GetChat(userID, &tgbotapi.GetChatOpts{})
+	return user.FirstName + " " + user.LastName
+}
+
 func (c *Client) ListenUpdates(msgModel *messages.Model, callbackModel *callbacks.Model) {
 	c.msgModel = msgModel
 	c.callbackModel = callbackModel
 
 	c.dispatcher.AddHandler(handlers.NewCommand("start", incomingUpdate))
+	c.dispatcher.AddHandler(handlers.NewCommand("help", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("my_order", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("full_order", incomingUpdate))
 	c.dispatcher.AddHandler(handlers.NewCommand("confirm_order", incomingUpdate))

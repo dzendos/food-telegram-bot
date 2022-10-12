@@ -11,9 +11,10 @@ const (
 )
 
 type Restaurant struct {
-	Name          string
-	Reference     string
-	ImageUrl      string
-	PaymentMethod PaymentMethod
-	Menu          *menu.Menu
+	Name            string
+	Reference       string
+	ImageUrl        string
+	TelephoneNumber string
+	PaymentMethod   PaymentMethod
+	Menu            *menu.Menu
 }

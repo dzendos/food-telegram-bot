@@ -37,7 +37,11 @@ func (s *Model) IncomingMessage(msg *Message) error {
 	// Trying to recognize the command.
 	switch msg.Text {
 	case "/start":
-		return nil
+		text := "Добро пожаловать!\nЗдесь вы можете легко и удобно делать совместные заказы со своими друзьями.\n\n/help - чтобы ознакомиться с функционалом."
+		return s.tgClient.SendMessage(text, msg.UserID)
+	case "/help":
+		text := "/new_order - создать новый заказ.\n/my_order - показать, что вы заказали.\n/full_order - показать общий заказ.\n/set_transaction_message - установить сообщение, приходящее вашим должникам.\n/confirm_order - подтвердить заказ."
+		return s.tgClient.SendMessage(text, msg.UserID)
 	case "/my_order":
 		text := state.OrderToString(msg.UserID)
 		return s.tgClient.SendMessage(text, msg.UserID)
@@ -45,7 +49,7 @@ func (s *Model) IncomingMessage(msg *Message) error {
 		text := state.GetFullOrder(msg.UserID)
 		return s.tgClient.SendMessage(text, msg.UserID)
 	case "/confirm_order": // TODO add restaurant number
-		text := "Готово! С данным рестораном можно связаться по телефону: 8800\nВы заказали:" + state.GetFullOrder(msg.UserID)
+		text := "Готово! С данным рестораном можно связаться с помощью: " + state.GetUserRestaurant(msg.UserID).TelephoneNumber + "\nВы заказали:" + state.GetFullOrder(msg.UserID)
 		debts := state.GetDebts(msg.UserID)
 
 		message := db.GetUserTransaction(msg.UserID)
