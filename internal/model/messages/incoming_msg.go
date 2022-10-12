@@ -48,8 +48,8 @@ func (s *Model) IncomingMessage(msg *Message) error {
 	case "/full_order":
 		text := state.GetFullOrder(msg.UserID)
 		return s.tgClient.SendMessage(text, msg.UserID)
-	case "/confirm_order":
-		text := "Готово! С данным рестораном можно связаться по телефону: 8800\nВы заказали:" + state.GetFullOrder(msg.UserID)
+	case "/confirm_order": // TODO add restaurant number
+		text := "Готово! С данным рестораном можно связаться с помощью: " + state.GetUserRestaurant(msg.UserID).TelephoneNumber + "\nВы заказали:" + state.GetFullOrder(msg.UserID)
 		debts := state.GetDebts(msg.UserID)
 
 		message := db.GetUserTransaction(msg.UserID)

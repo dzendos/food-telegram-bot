@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/dzendos/dubna/internal/clients/tg"
 	"github.com/dzendos/dubna/internal/config"
@@ -11,6 +14,20 @@ import (
 	"github.com/dzendos/dubna/internal/model/state"
 	"github.com/dzendos/dubna/scrapper"
 )
+
+func pasteUrl(path string, outputPath string, replaceMent string, url string) {
+	input, err := os.ReadFile(path)
+
+	if err != nil {
+		log.Fatal("pasting url to web failed: ", err)
+	}
+
+	output := bytes.Replace(input, []byte(replaceMent), []byte(url), 1)
+	if err = os.WriteFile(outputPath, output, 0666); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
 
 func main() {
 	scrapper.InitializeServerState()
@@ -25,8 +42,11 @@ func main() {
 		log.Fatal("tg client init failed:", err)
 	}
 
-	state.RestaurantReference = config.Url() + "restaurantPage.html"
-	state.MenuReference = config.Url() + "mainPage.html"
+	state.RestaurantReference = config.Url()
+	state.MenuReference = config.Url() + "/mainPage.html"
+	//{{.url}}
+	pasteUrl("web/mainPage_template.js", "web/mainPage.js", "{{.url}}", config.Url())
+	pasteUrl("web/restaurantPage_template.js", "web/restaurantPage.js", "{{.url}}", config.Url())
 
 	log.Println(state.RestaurantReference)
 

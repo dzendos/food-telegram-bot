@@ -23,9 +23,10 @@ func InitializeServerState() {
 
 func parseDodo() *restaurant.Restaurant {
 	restaurant := restaurant.Restaurant{
-		Name:      "Dodo pizza",
-		Reference: "https://dodopizza.ru/dubna",
-		ImageUrl:  "https://sun9-15.userapi.com/impg/Ocu8UXi770N3V3E2b-K2xuUNmpgKiEvp_Ezhhw/8qUjm-hrswI.jpg?size=2560x2560&quality=95&sign=f45821a68464bb2105d35791262485c8&type=album",
+		Name:            "Dodo pizza",
+		Reference:       "https://dodopizza.ru/dubna",
+		TelephoneNumber: "+7-800-302-00-60",
+		ImageUrl:        "https://sun9-15.userapi.com/impg/Ocu8UXi770N3V3E2b-K2xuUNmpgKiEvp_Ezhhw/8qUjm-hrswI.jpg?size=2560x2560&quality=95&sign=f45821a68464bb2105d35791262485c8&type=album",
 	}
 
 	html := scripts.GetDodoHtml()
@@ -67,9 +68,10 @@ func parseDodo() *restaurant.Restaurant {
 
 func parseDubna() *restaurant.Restaurant {
 	restaurant := restaurant.Restaurant{
-		Name:      "Dubna china",
-		Reference: "https://dubna-china.ru/",
-		ImageUrl:  "http://g04.s.alicdn.com/kf/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM/224107622/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM.jpg",
+		Name:            "Dubna china",
+		Reference:       "https://dubna-china.ru/",
+		TelephoneNumber: "+7-925-155-02-07",
+		ImageUrl:        "http://g04.s.alicdn.com/kf/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM/224107622/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM.jpg",
 	}
 
 	html := scripts.GetDubnaChinaHtml()
@@ -115,9 +117,10 @@ func parseDubna() *restaurant.Restaurant {
 
 func parseSushi() *restaurant.Restaurant {
 	restaurant := restaurant.Restaurant{
-		Name:      "Полёт",
-		Reference: "https://dubna-sushi.ru/",
-		ImageUrl:  "https://sun9-4.userapi.com/impf/c849328/v849328504/1703f8/aMlfiWt4qs8.jpg?size=882x882&quality=96&sign=2b4d57c5a161c921977d98d0283cd84a&type=album",
+		Name:            "Полёт",
+		Reference:       "https://dubna-sushi.ru/",
+		TelephoneNumber: "+7-910-424-00-99",
+		ImageUrl:        "https://sun9-4.userapi.com/impf/c849328/v849328504/1703f8/aMlfiWt4qs8.jpg?size=882x882&quality=96&sign=2b4d57c5a161c921977d98d0283cd84a&type=album",
 	}
 
 	html := scripts.GetDubnaSushi()
@@ -163,9 +166,10 @@ func parseSushi() *restaurant.Restaurant {
 
 func parseNearFood() *restaurant.Restaurant {
 	restaurant := restaurant.Restaurant{
-		Name:      "Еда рядом",
-		Reference: "https://app.nearfood.ru/",
-		ImageUrl:  "https://sun9-59.userapi.com/impg/SjTcGsraRihqTpawb5kTWM4vPAIZu3Ga7GVEpg/He5zw2p6a6Q.jpg?size=512x512&quality=96&sign=34a5e8939990c1ee167d253eaa677594&type=album",
+		Name:            "Еда рядом",
+		Reference:       "https://app.nearfood.ru/",
+		TelephoneNumber: "https://app.nearfood.ru/",
+		ImageUrl:        "https://sun9-59.userapi.com/impg/SjTcGsraRihqTpawb5kTWM4vPAIZu3Ga7GVEpg/He5zw2p6a6Q.jpg?size=512x512&quality=96&sign=34a5e8939990c1ee167d253eaa677594&type=album",
 	}
 
 	html := scripts.GetNearFoodHtml()
@@ -210,9 +214,10 @@ func parseNearFood() *restaurant.Restaurant {
 func parseMrLim() *restaurant.Restaurant {
 	//log.Println("Start parsing Mr. Lim")
 	restaurant := restaurant.Restaurant{
-		Name:      "Mr. Lim",
-		Reference: "https://mrlim.ru/",
-		ImageUrl:  "https://vsem-edu-oblako.ru/upload/store/merchant1309/1642215585mrlimheaderlogo.png",
+		Name:            "Mr. Lim",
+		Reference:       "https://mrlim.ru/",
+		TelephoneNumber: "+7-909-159-15-99",
+		ImageUrl:        "https://vsem-edu-oblako.ru/upload/store/merchant1309/1642215585mrlimheaderlogo.png",
 	}
 
 	html := scripts.GetMrLimHtml()
