@@ -56,3 +56,8 @@
 * url - ссылка по которой будет хоститься веб оболочка бота
 
 собирать при помощи `make run`
+
+Light theme     | Dark theme
+:--------------:|:------------:
+![](https://github.com/dzendos/food-telegram-bot/blob/development/img/light_menu.jpg?raw=true) | ![](https://github.com/dzendos/food-telegram-bot/blob/development/img/darkj_menu.jpg?raw=true)
+![]
