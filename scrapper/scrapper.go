@@ -71,7 +71,7 @@ func parseDubna() *restaurant.Restaurant {
 		Name:            "Dubna china",
 		Reference:       "https://dubna-china.ru/",
 		TelephoneNumber: "+7-925-155-02-07",
-		ImageUrl:        "http://g04.s.alicdn.com/kf/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM/224107622/HTB1b.WHLpXXXXcrXpXXq6xXFXXXM.jpg",
+		ImageUrl:        "https://sun9-north.userapi.com/sun9-88/s/v1/ig2/5hoHe1SjuCfHi6xUTIYi5BKxl-zBcyoso8UypBcaqzlvyAiwHVrwd5OjnZ1HFZKX0MwPPeOLxDGe390k8ysKPg-R.jpg?size=604x604&quality=96&type=album",
 	}
 
 	html := scripts.GetDubnaChinaHtml()
